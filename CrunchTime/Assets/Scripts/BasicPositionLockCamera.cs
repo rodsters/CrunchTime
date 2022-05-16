@@ -27,5 +27,7 @@ public class BasicPositionLockCamera : MonoBehaviour
         {
             cameraPosition.y = targetPosition.y;
         }
+
+        this.managedCamera.transform.position = cameraPosition;
     }
 }
