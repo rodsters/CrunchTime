@@ -40,8 +40,10 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
+
         if(Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1"))
         {
+            
             Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
         }
     }

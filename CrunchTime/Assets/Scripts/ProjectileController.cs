@@ -12,6 +12,7 @@ public class ProjectileController : MonoBehaviour
 
     void Start()
     {
+        
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Vector2 direction = mousePosition - transform.position;
@@ -24,7 +25,7 @@ public class ProjectileController : MonoBehaviour
         // get mouse position
         // Vector3 mousePos = Input.mousePosition;   
         transform.position += transform.right * Time.deltaTime * this.speed;
-        
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
