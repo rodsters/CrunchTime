@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class QuitMenu : MonoBehaviour
 {
-    public void PlayGame()
+    public void RestartGame()
     {
-        SceneManager.LoadScene("Timer");
+        SceneManager.LoadScene("Menu");
     }
 
     public void QuitGame()
     {
         Debug.Log("QUIT");
         Application.Quit();
+    }
+
+    public void CreditsScene()
+    {
+        SceneManager.LoadScene("Credits");
     }
 }

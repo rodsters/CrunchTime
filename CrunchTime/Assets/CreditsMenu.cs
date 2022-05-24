@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class CreditsMenu : MonoBehaviour
 {
-    public void PlayGame()
+    public void RestartGame()
     {
-        SceneManager.LoadScene("Timer");
+        SceneManager.LoadScene("Menu");
     }
 
     public void QuitGame()
