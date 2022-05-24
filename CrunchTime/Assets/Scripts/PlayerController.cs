@@ -67,11 +67,5 @@ public class PlayerController : MonoBehaviour
         {
             sprite.flipX = false;
         }
-
-
-
-
     }
-
-
 }
