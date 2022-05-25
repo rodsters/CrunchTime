@@ -9,6 +9,9 @@ public class ProjectileController : MonoBehaviour
 
     Vector3 mousePosition;
     float angle;
+    // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
+    // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
+    float inaccuracy = PlayerController.inaccuracy;
 
     void Start()
     {
@@ -17,6 +20,7 @@ public class ProjectileController : MonoBehaviour
 
         Vector2 direction = mousePosition - transform.position;
         angle = Vector2.SignedAngle(Vector2.right, direction);
+        angle += Random.Range(-inaccuracy, inaccuracy);
         transform.eulerAngles = new Vector3(0, 0, angle);
     }
 
