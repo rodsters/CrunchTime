@@ -8,6 +8,7 @@ public class OpenShop : MonoBehaviour
     // Referenced https://www.youtube.com/watch?v=EEtOt0Jf7PQ&t=563s when creating actual UI itself.
     public GameObject Panel;
 
+    // This checks the state of the panel, and changes it to the opposite. When the panel is closed, it opens it.
     public void Shop()
     {
         if (Panel != null)
