@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class ProjectileSpec : MonoBehaviour
+/* 
+Projectile Spec
+Specification of a projectile
+*/
+
+public class ProjectileSpec
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int damage;
 
-    // Update is called once per frame
-    void Update()
+    public ProjectileSpec(int damage)
     {
-        
+        this.damage = damage;
     }
 }
