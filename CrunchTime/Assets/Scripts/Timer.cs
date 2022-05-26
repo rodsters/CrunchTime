@@ -19,14 +19,15 @@ public class Timer : MonoBehaviour
     }
 
 // Functions to allow timer to be used as a currency.
-    void decreaseTime(float cost)
+
+    public void setTime(float newTime)
     {
-        currentTime -= cost;
+        currentTime = newTime;
     }
 
-    void increaseTime(float bonus)
+    public float returnTime()
     {
-        currentTime += bonus;
+        return currentTime;
     }
 
     void Update()
