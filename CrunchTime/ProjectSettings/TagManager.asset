@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Protagonist
   - Water
   - UI
   - Projectile
-  - 
+  - Obstacle
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Projectile
+    uniqueID: 3390776877
     locked: 0

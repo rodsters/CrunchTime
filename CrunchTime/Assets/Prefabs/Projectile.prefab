@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 9034248828703923382}
   - component: {fileID: 1992045394002154124}
   - component: {fileID: 4081845461512838172}
-  - component: {fileID: 3152903904430120291}
-  m_Layer: 0
+  - component: {fileID: 5525306879197168888}
+  m_Layer: 6
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,13 +65,12 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 2
---- !u!114 &3152903904430120291
+  m_Constraints: 0
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4009522550520590164}
   - component: {fileID: 3025066077479457697}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +153,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: e35cdebd7ce32304481c144a62699b77, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
