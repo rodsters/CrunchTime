@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     Vector3 mousePosition;
     // This variable stores the cooldown between shots for the player. The player can shoot 1 / FireRate shots per second.
     // Set to public for upgrades to access it.
-    [SerializeField] public float FireRate = 0.2f;
+    [SerializeField] public float FireRate = 0.3f;
     // This is a timer that is set to fire rate after shooting but decrements by Time.deltaTime every frame.
     private float FireRateTimer = 0.0f;
 
@@ -273,7 +273,7 @@ public class PlayerController : MonoBehaviour
         }
         // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
         // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
-        else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && ( FireRateTimer - (FireRate/2.0f) ) <= 0)
+        else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && ( FireRateTimer - (FireRate/2.75f) ) <= 0)
         {
             FireRateTimer = FireRate;
             Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
@@ -290,6 +290,9 @@ public class PlayerController : MonoBehaviour
         Vector2 direction = mousePosition - transform.position;
         // This is used to detect where the player should be facing.
         angle = Vector2.SignedAngle(Vector2.down, direction) + 270;
+
+        // Set the player's velocity to zero. This is to prevent physics from being broken when an enemy runs into the player.
+        rigidbody2d.velocity = new Vector2(0, 0);
 
         // If on the right side of the unit circle, else on the left side.
         if ((angle) > 90 && (angle) < 270)
