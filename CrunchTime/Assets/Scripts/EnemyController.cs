@@ -22,11 +22,16 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D rigidbody2d;
     private int pathStep;
 
+    private GameObject gameManager;
+    private Timer timer;
+    private int timeAdded = 15f;
 
     void Start()
     {
         this.rigidbody2d = GetComponent<Rigidbody2D>();
         this.seeker = GetComponent<Seeker>();
+        gameManager = GameObject.Find("GameManager");
+        timer = gameManager.GetComponent<Timer>();
         
         // Default destination is the player.
         destination = player.transform.position;
@@ -73,10 +78,8 @@ public class EnemyController : MonoBehaviour
         {
             pathStep++;
         }
-
-        
     }
-
+    
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
@@ -91,16 +94,23 @@ public class EnemyController : MonoBehaviour
         if (currentHealth <= 0)
         {
             Destroy(gameObject);
+            AddTime(timeAdded);
         }
+    }    
+    
+    private void AddTime(float timeToAdd)
+    {
+        timer.setTime(timer.returnTime() + timeToAdd);
     }
+    
     // The two functions below are simple getter functions for current and max health respectively.
     public float GetCurrentHealth()
     {
         return currentHealth;
     }
+    
     public float GetMaxHealth()
     {
         return maxHealth;
     }
-
 }
