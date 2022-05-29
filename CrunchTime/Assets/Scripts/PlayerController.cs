@@ -618,6 +618,12 @@ public class PlayerController : MonoBehaviour
     {
         dashSpeed = newDashSpeed;
     }
+    // Intended for dashing upgrades/downgrades, give the player a new dash cooldown.
+    // The length of the cooldown is dashCooldown * 3 seconds.
+    public void SetDashCooldown(float newDashCooldown)
+    {
+        dashCooldown = newDashCooldown;
+    }
     // Intended for firing upgrades/downgrades, give the player a new angle of inaccuracy when firing.
     // This is recommended along with a heavy firing speed upgrade to make it a little more interesting.
     public void SetInaccuracy(float newInaccuracy)
