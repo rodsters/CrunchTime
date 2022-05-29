@@ -4,19 +4,27 @@ using UnityEngine;
 using Player.Command;
 
 // Made by Jasper Fadden
-// This is an upgraded draft of Rainbow Man's player controller. The movement code utilizes the ADSR system often seen in music that our professor described in a lecture. This allows smooth slow-down and speed-up physics that make movement feel much less rigid. This controller also implements some rudimentary animation (having the player turn to face the mouse), player statistics like shooting speed and inaccuracy, and more.
+// This is an upgraded draft of Rainbow Man's player controller. The movement code utilizes the ADSR system often seen in music that our professor described in a lecture. This allows smooth slow-down and speed-up physics that make movement feel much less rigid. The controller also implements some rudimentary animation (having the player turn to face the mouse), player statistics like shooting speed and inaccuracy, and more.
 
 // Credits to Josh McCoy for much of the code implementing Attack-Decay-Sustain-Release movement.
 
 public class PlayerController : MonoBehaviour
 {
-    // Movement speed for the player
+    // Movement speed for the player. It is serialized and has a setter function for upgrades.
     [SerializeField] float speed = 10.0f;
+    // This is used to store the normal speed before setting it to something else (ex. 0 when dashing).
+    float normalSpeed;
+
     // This is the prefab the player shoors.
     [SerializeField] public ProjectileController ProjectilePrefab;
 
+    // Max vs current health. These are to be changes or accessed with several dedicated getter/sett functions. 
+    [SerializeField] float maxHealth = 20.0f;
+    float currentHealth;
+
     Rigidbody2D rigidbody2d;
     SpriteRenderer sprite;
+    TrailRenderer trail;
     // These two variables are used to store what direction the player is moving in. Right/Upwards are positive, Left/Down negative.
     float horizontal;
     float vertical;
@@ -34,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
-    // Set to public for projectiles and upgrades to access it.
+    // Set to public for projectiles to access it, and it has a setter function.
     [SerializeField] static public float inaccuracy = 1.5f;
 
 
@@ -67,6 +75,25 @@ public class PlayerController : MonoBehaviour
     private float VDualReleaseTimer = 0.0f;
     private float DualReleaseThreshold = 0.1f;
 
+    // This timer controls whether or not Rainbowman currently has invulnerability frames active.
+    private float InvulnerabilityTimer = 0.0f;
+
+    // This timer controls the speed for HP regeneration. The rate is serialized and has a setter function in the case of upgrades.
+    [SerializeField] private float regenTimerRate = 2.0f;
+    private float RegenTimer = 0;
+
+    // This timer controls the time for a player's dash. Time and speed are serialized and have setter functions for upgrades.
+    // Note that the player cannot dash again until DashTimer is less than (-dashCooldown * 3), 
+    // something designed to prevent the player from infinitely dashing and therefore being completely invulnerable.
+    [SerializeField] private float dashTimeLength = 0.25f;
+    [SerializeField] private float dashCooldown = 0.25f;
+    private float DashTimer = 0;
+    private bool isDashing = false;
+    [SerializeField] private float dashSpeed = 22.5f;
+    // Used to temporarily store the angle chosen at the beginning of a dash.
+    Vector3 dashAngleVector;
+    private float dashAngle;
+
     // There are five possible phases the player can be in, each one modifies speed depending on how long in the phase the player is.
     private enum Phase { Attack, Decay, Sustain, Release, None };
     private Phase CurrentPhaseVertical;
@@ -80,14 +107,254 @@ public class PlayerController : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         CurrentPhaseVertical = Phase.None;
         CurrentPhaseHorizontal = Phase.None;
+        trail = GetComponent<TrailRenderer>();
+        trail.emitting = false;
+        trail.widthMultiplier = 0.75f;
 
         // This set of two property changes slightly enhances collision so the player doesn't clip into walls.
         GetComponent<Rigidbody2D>().collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.Extrapolate;
+
+        currentHealth = maxHealth;
+        RegenTimer = regenTimerRate;
+        DashTimer = (-3 * dashCooldown);
+        normalSpeed = speed;
     }
 
     // Update is called once per frame.
     void Update()
+    {
+        // Decrement all timers in real timer every Update() frame (like regneration, invulnerability, and movement stage timers).
+        DecrementTimers();
+
+        // This gargantuan function accurately get's the player's direction respecting stages for FixedUpdate's translations.
+        GetMovementDirection();
+
+        // This code is for shooting. The player will be able to shoot by holding down either
+        // of the two buttons, repeating fire every time the FireRateTimer reaches 0.
+        if ( (Input.GetButton("Jump") || Input.GetButton("Fire1")) && FireRateTimer <= 0 )
+        {
+            FireRateTimer = FireRate;
+            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+        }
+        // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
+        // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
+        else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && ( FireRateTimer - (FireRate/2.75f) ) <= 0)
+        {
+            FireRateTimer = FireRate;
+            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+        }
+
+
+    }
+
+    // Fixed update is used for better compatibility and physics. 
+    // It is important the player's position is changed here for clipping reasons.
+    void FixedUpdate()
+    {
+        // Set the player's velocity to zero. This is to prevent continuous knockback when an enemy runs into the player.
+        rigidbody2d.velocity = new Vector2(0, 0);
+
+        // Basic sprite animation is done via flipping horizontally. It's based on where the player's mouse is, 
+        // so we have to calculate things. Get the player's mouse position and RainbowMan's current direction.
+        // This is used later in Update () when we get the angle for sprite flipping.
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = mousePosition - transform.position;
+        // This is used to detect where the player should be facing.
+        angle = Vector2.SignedAngle(Vector2.down, direction) + 270;
+
+        // This code allows a dash to begin if the player has waited about a while after having dashed.
+        if ((Input.GetButton("Fire2")) && (DashTimer <= (-3 * (dashCooldown))))
+        {
+            isDashing = true;
+            DashTimer = dashTimeLength;
+            // The player should be invulnerable during dashes to dodge projectiles or enemy attacks.
+            InvulnerabilityTimer = dashTimeLength;
+
+            // We have to get a special angle for wdetermining where Rainbowman dashes.
+            dashAngle = Vector2.SignedAngle(Vector2.right, direction);
+
+            trail.emitting = true;
+        }
+
+        if (isDashing)
+        {
+            speed = 0;
+            // Rotate rainbowman towards where they are dashing in between frames, move rainbowman that direction,
+            // and ensure rainbowman goes back to default rotation afterwards when the frame is drawn.
+            transform.eulerAngles = new Vector3(0, 0, dashAngle);
+            transform.position += transform.right * Time.deltaTime * dashSpeed;
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+
+        // Stop dashing after the player has dashed for dashTimeLength seconds.
+        if (DashTimer <= 0)
+        {
+            isDashing = false;
+            speed = normalSpeed;
+            trail.emitting = false;
+        }
+
+        // Regenerate health between a customizeable delay
+        if (RegenTimer <= 0)
+        {
+            ChangeCurrentHealth(1.0f);
+            RegenTimer = regenTimerRate;
+        }
+
+        // If on the right side of the unit circle, else on the left side.
+        if ((angle) > 90 && (angle) < 270)
+        {
+            sprite.flipX = true;
+        }
+        else
+        {
+            sprite.flipX = false;
+        }
+
+        // After animation code, here we move the player by the inputs calculated in the Update() function.
+        if (this.CurrentPhaseHorizontal != Phase.None)
+        {
+            position = this.gameObject.transform.position;
+            // Note position.x is changed based on "horizontal." The speed is decreased for diagonal movement.
+            if (vertical != 0)
+            {
+                position.x += horizontal * speed * HorizontalADSREnvelope() * Time.deltaTime * (1.0f / 1.4142f);
+            }
+            else
+            {
+                position.x += horizontal * speed * HorizontalADSREnvelope() * Time.deltaTime;
+            }
+            gameObject.transform.position = position;
+
+        }
+
+        if (this.CurrentPhaseVertical != Phase.None)
+        {
+            position = this.gameObject.transform.position;
+            // Note position.y is changed based on "vertical." Again, speed is decreased for diagonal movement.
+            if (vertical != 0)
+            {
+                position.y += vertical * speed * VerticalADSREnvelope() * Time.deltaTime * (1.0f / 1.4142f);
+            }
+            else
+            {
+                position.y += vertical * speed * VerticalADSREnvelope() * Time.deltaTime;
+            }
+            gameObject.transform.position = position;
+        }
+
+        // Floats are often error ridden and slightly off, so this code ensure's the player is always properly stopped when required.
+        if (horizontal < 0.01 && horizontal > -0.01)
+        {
+            horizontal = 0;
+        }
+        if (vertical < 0.01 && vertical > -0.01)
+        {
+            vertical = 0;
+        }
+    }
+
+    // Simple function borrowed from JoshMcCoy, these resets all ADSR timers.
+    private void ResetTimersHorizontal()
+    {
+        this.HAttackTimer = 0.0f;
+        this.HDecayTimer = 0.0f;
+        this.HSustainTimer = 0.0f;
+        this.HReleaseTimer = 0.0f;
+    }
+    private void ResetTimersVertical()
+    {
+
+        this.VAttackTimer = 0.0f;
+        this.VDecayTimer = 0.0f;
+        this.VSustainTimer = 0.0f;
+        this.VReleaseTimer = 0.0f;
+    }
+
+    // Code from JoshMcCoy, this essentially allows us to modify the value of movement depending on current state.
+    // Two versions exist for horizontal and vertical movement.
+    float HorizontalADSREnvelope()
+    {
+        float velocity = 0.0f;
+
+        if (Phase.Attack == this.CurrentPhaseHorizontal)
+        {
+            velocity = this.Attack.Evaluate(this.HAttackTimer / this.AttackDuration);
+            this.HAttackTimer += Time.deltaTime;
+            if (this.HAttackTimer > this.AttackDuration)
+            {
+                this.CurrentPhaseHorizontal = Phase.Decay;
+            }
+        }
+        else if (Phase.Decay == this.CurrentPhaseHorizontal)
+        {
+            velocity = this.Decay.Evaluate(this.HDecayTimer / this.DecayDuration);
+            this.HDecayTimer += Time.deltaTime;
+            if (this.HDecayTimer > this.DecayDuration)
+            {
+                this.CurrentPhaseHorizontal = Phase.Sustain;
+            }
+        }
+        else if (Phase.Sustain == this.CurrentPhaseHorizontal)
+        {
+            velocity = this.Sustain.Evaluate(this.HSustainTimer / this.SustainDuration);
+            this.HSustainTimer += Time.deltaTime;
+        }
+        else if (Phase.Release == this.CurrentPhaseHorizontal)
+        {
+            velocity = this.Release.Evaluate(this.HReleaseTimer / this.ReleaseDuration);
+            this.HReleaseTimer += Time.deltaTime;
+            if (this.HReleaseTimer > this.ReleaseDuration)
+            {
+                this.CurrentPhaseHorizontal = Phase.None;
+            }
+        }
+        return velocity;
+    }
+
+    // Vertical version.
+    float VerticalADSREnvelope()
+    {
+        float velocity = 0.0f;
+
+        if (Phase.Attack == this.CurrentPhaseVertical)
+        {
+            velocity = this.Attack.Evaluate(this.VAttackTimer / this.AttackDuration);
+            this.VAttackTimer += Time.deltaTime;
+            if (this.VAttackTimer > this.AttackDuration)
+            {
+                this.CurrentPhaseVertical = Phase.Decay;
+            }
+        }
+        else if (Phase.Decay == this.CurrentPhaseVertical)
+        {
+            velocity = this.Decay.Evaluate(this.VDecayTimer / this.DecayDuration);
+            this.VDecayTimer += Time.deltaTime;
+            if (this.VDecayTimer > this.DecayDuration)
+            {
+                this.CurrentPhaseVertical = Phase.Sustain;
+            }
+        }
+        else if (Phase.Sustain == this.CurrentPhaseVertical)
+        {
+            velocity = this.Sustain.Evaluate(this.VSustainTimer / this.SustainDuration);
+            this.VSustainTimer += Time.deltaTime;
+        }
+        else if (Phase.Release == this.CurrentPhaseVertical)
+        {
+            velocity = this.Release.Evaluate(this.VReleaseTimer / this.ReleaseDuration);
+            this.VReleaseTimer += Time.deltaTime;
+            if (this.VReleaseTimer > this.ReleaseDuration)
+            {
+                this.CurrentPhaseVertical = Phase.None;
+            }
+        }
+        return velocity;
+    }
+
+    // To avoid crowding Update() more than it is, this function decrements all timers.
+    private void DecrementTimers()
     {
         // These timers count down every frame if they are above 0
         // These "dual release timers" are designed to allow the player to stop on the spot if they hit the reverse direction 
@@ -105,10 +372,28 @@ public class PlayerController : MonoBehaviour
         {
             FireRateTimer -= Time.deltaTime;
         }
+        // This timer enforces invulnerability frames so that the player isn't insta-killed by enemies attacking 60 times a second.
+        if (InvulnerabilityTimer > 0)
+        {
+            InvulnerabilityTimer -= Time.deltaTime;
+        }
+        // This timer enforces health regeneration so that the player can make a come-back after mistakes.
+        if (RegenTimer > 0)
+        {
+            RegenTimer -= Time.deltaTime;
+        }
 
-        // This LONG chain of if statement sets get player input for WASD and arrowkeys, and it helps implement 2D ADSR smoothly.
-        // Things get much more advanced when translating things to 2D movement, so this is a long process
+        // This timer enforces the delay and duration. Unlike other timers, it decrements to it's negative maximum
+        if (DashTimer > (-3 * dashCooldown))
+        {
+            DashTimer -= Time.deltaTime;
+        }
+    }
 
+    // This LONG chain of if statement sets get player input for WASD, and it helps implement 2D ADSR smoothly.
+    // Things get much more advanced when translating things to 2D movement, so this is a long process
+    private void GetMovementDirection()
+    {
         // These are the 4 GetKeyDown Statements for the attack phase.
         // Note that directions and phases aren't updated every frame, only on keydown or keyup mostly.
         // This is to allow time based progression of states in case we decide to use the middle two stages.
@@ -262,186 +547,103 @@ public class PlayerController : MonoBehaviour
             this.CurrentPhaseVertical = Phase.Sustain;
             VDualReleaseTimer = DualReleaseThreshold;
         }
+    }
 
-
-        // This code is not for movement, but shooting. The player will be able to shoot by
-        // holding down either of two buttons, repeating fire every time the FireRateTimer reaches 0.
-        if ( (Input.GetButton("Jump") || Input.GetButton("Fire1")) && FireRateTimer <= 0 )
-        {
-            FireRateTimer = FireRate;
-            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+    // This is a collision script for melee enemies and projectiles. The player takes a constant amount of damage (later it 
+    // could be a variable amount stored in an enemyController script). This is called every frame it intersects with the player.
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy")) {
+            ChangeCurrentHealth(-10);
         }
-        // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
-        // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
-        else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && ( FireRateTimer - (FireRate/2.75f) ) <= 0)
-        {
-            FireRateTimer = FireRate;
-            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+        if (other.gameObject.CompareTag("EnemyProjectile")) {
+            ChangeCurrentHealth(-5);
         }
     }
 
-    // Fixed update is used for better compatibility and physics. 
-    // It is important the player's position is changed here for clipping reasons.
-    void FixedUpdate()
+    // Beginning of public interface functions:
+
+    // This increases (with a positive argument) or decreases (with a negative argument) the player's current health.
+    // If the player is invulnerable (recently damaged or dashing), they can't be damaged through this.
+    public void ChangeCurrentHealth(float hitPointsToAdd)
     {
-        // Basic sprite animation via flipping horizontally. It's based on where the player's mouse is, so we have to calculate things.
-        // Get the player's mouse position and RainbowMan's current direction.
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = mousePosition - transform.position;
-        // This is used to detect where the player should be facing.
-        angle = Vector2.SignedAngle(Vector2.down, direction) + 270;
-
-        // Set the player's velocity to zero. This is to prevent physics from being broken when an enemy runs into the player.
-        rigidbody2d.velocity = new Vector2(0, 0);
-
-        // If on the right side of the unit circle, else on the left side.
-        if ((angle) > 90 && (angle) < 270)
+        if ( (InvulnerabilityTimer > 0) && (hitPointsToAdd < 0) )
         {
-            sprite.flipX = true;
+            return;
         }
         else
         {
-            sprite.flipX = false;
-        }
+            currentHealth += hitPointsToAdd;
 
-        // After animation code, here we move the player by the inputs calculated in the Update() function.
-        if (this.CurrentPhaseHorizontal != Phase.None)
-        {
-            position = this.gameObject.transform.position;
-            // Note position.x is changed based on "horizontal." The speed is decreased for diagonal movement.
-            if (vertical != 0)
+            // Set vulnerability timer if damaged, or ensure max health is respected if healed.
+            if (hitPointsToAdd < 0)
             {
-                position.x += horizontal * speed * HorizontalADSREnvelope() * Time.deltaTime * (1.0f / 1.4142f);
+                InvulnerabilityTimer = 0.5f;
+                Debug.Log("Took Damage: " + hitPointsToAdd);
             }
-            else
+            else if (currentHealth > maxHealth)
             {
-                position.x += horizontal * speed * HorizontalADSREnvelope() * Time.deltaTime;
+                currentHealth = maxHealth;
             }
-            gameObject.transform.position = position;
-
-        }
-
-        if (this.CurrentPhaseVertical != Phase.None)
-        {
-            position = this.gameObject.transform.position;
-            // Note position.y is changed based on "vertical." Again, speed is decreased for diagonal movement.
-            if (vertical != 0)
-            {
-                position.y += vertical * speed * VerticalADSREnvelope() * Time.deltaTime * (1.0f / 1.4142f);
-            }
-            else
-            {
-                position.y += vertical * speed * VerticalADSREnvelope() * Time.deltaTime;
-            }
-            gameObject.transform.position = position;
-        }
-
-        // Floats are often error ridden and slightly off, so this code ensure's the player is always properly stopped when required.
-        if (horizontal < 0.01 && horizontal > -0.01)
-        {
-            horizontal = 0;
-        }
-        if (vertical < 0.01 && vertical > -0.01)
-        {
-            vertical = 0;
         }
     }
 
-    // Simple function borrowed from JoshMcCoy, these resets all ADSR timers.
-    private void ResetTimersHorizontal()
+    // Intended for HP upgrades (though also functional with downgrades), give the player a new max health and a full heal.
+    public void SetMaxHealth(float newMaxHealth)
     {
-        this.HAttackTimer = 0.0f;
-        this.HDecayTimer = 0.0f;
-        this.HSustainTimer = 0.0f;
-        this.HReleaseTimer = 0.0f;
+        maxHealth = newMaxHealth;
+        // Give the player a full heal to go with the maxHealth change
+        currentHealth = newMaxHealth;
     }
-    private void ResetTimersVertical()
+    // Intended for speed upgrades/downgrades, give the player a new speed.
+    public void SetSpeed(float newSpeed)
     {
-
-        this.VAttackTimer = 0.0f;
-        this.VDecayTimer = 0.0f;
-        this.VSustainTimer = 0.0f;
-        this.VReleaseTimer = 0.0f;
+        if (isDashing)
+        {
+            normalSpeed = newSpeed;
+        }
+        else
+        {
+            speed = newSpeed;
+            normalSpeed = newSpeed;
+        }
     }
-
-    // Code from JoshMcCoy, this essentially allows us to modify the value of movement depending on current state.
-    // Two versions exist for horizontal and vertical movement.
-    float HorizontalADSREnvelope()
+    // Intended for dashing upgrades/downgrades, give the player a new time spent dashing.
+    public void SetDashTime(float newDashTime)
     {
-        float velocity = 0.0f;
-
-        if (Phase.Attack == this.CurrentPhaseHorizontal)
-        {
-            velocity = this.Attack.Evaluate(this.HAttackTimer / this.AttackDuration);
-            this.HAttackTimer += Time.deltaTime;
-            if (this.HAttackTimer > this.AttackDuration)
-            {
-                this.CurrentPhaseHorizontal = Phase.Decay;
-            }
-        }
-        else if (Phase.Decay == this.CurrentPhaseHorizontal)
-        {
-            velocity = this.Decay.Evaluate(this.HDecayTimer / this.DecayDuration);
-            this.HDecayTimer += Time.deltaTime;
-            if (this.HDecayTimer > this.DecayDuration)
-            {
-                this.CurrentPhaseHorizontal = Phase.Sustain;
-            }
-        }
-        else if (Phase.Sustain == this.CurrentPhaseHorizontal)
-        {
-            velocity = this.Sustain.Evaluate(this.HSustainTimer / this.SustainDuration);
-            this.HSustainTimer += Time.deltaTime;
-        }
-        else if (Phase.Release == this.CurrentPhaseHorizontal)
-        {
-            velocity = this.Release.Evaluate(this.HReleaseTimer / this.ReleaseDuration);
-            this.HReleaseTimer += Time.deltaTime;
-            if (this.HReleaseTimer > this.ReleaseDuration)
-            {
-                this.CurrentPhaseHorizontal = Phase.None;
-            }
-        }
-        return velocity;
+        dashTimeLength = newDashTime;
     }
-
-    // Vertical version.
-    float VerticalADSREnvelope()
+    // Intended for dashing upgrades/downgrades, give the player a new speed when dashing.
+    public void SetDashSpeed(float newDashSpeed)
     {
-        float velocity = 0.0f;
-
-        if (Phase.Attack == this.CurrentPhaseVertical)
-        {
-            velocity = this.Attack.Evaluate(this.VAttackTimer / this.AttackDuration);
-            this.VAttackTimer += Time.deltaTime;
-            if (this.VAttackTimer > this.AttackDuration)
-            {
-                this.CurrentPhaseVertical = Phase.Decay;
-            }
-        }
-        else if (Phase.Decay == this.CurrentPhaseVertical)
-        {
-            velocity = this.Decay.Evaluate(this.VDecayTimer / this.DecayDuration);
-            this.VDecayTimer += Time.deltaTime;
-            if (this.VDecayTimer > this.DecayDuration)
-            {
-                this.CurrentPhaseVertical = Phase.Sustain;
-            }
-        }
-        else if (Phase.Sustain == this.CurrentPhaseVertical)
-        {
-            velocity = this.Sustain.Evaluate(this.VSustainTimer / this.SustainDuration);
-            this.VSustainTimer += Time.deltaTime;
-        }
-        else if (Phase.Release == this.CurrentPhaseVertical)
-        {
-            velocity = this.Release.Evaluate(this.VReleaseTimer / this.ReleaseDuration);
-            this.VReleaseTimer += Time.deltaTime;
-            if (this.VReleaseTimer > this.ReleaseDuration)
-            {
-                this.CurrentPhaseVertical = Phase.None;
-            }
-        }
-        return velocity;
+        dashSpeed = newDashSpeed;
     }
+    // Intended for dashing upgrades/downgrades, give the player a new dash cooldown.
+    // The length of the cooldown is dashCooldown * 3 seconds.
+    public void SetDashCooldown(float newDashCooldown)
+    {
+        dashCooldown = newDashCooldown;
+    }
+    // Intended for firing upgrades/downgrades, give the player a new angle of inaccuracy when firing.
+    // This is recommended along with a heavy firing speed upgrade to make it a little more interesting.
+    public void SetInaccuracy(float newInaccuracy)
+    {
+        inaccuracy = newInaccuracy;
+    }
+    // Intended for firing upgrades/downgrades, give the player a new firing rate.
+    public void SetFireRate(float newFireRate)
+    {
+        FireRate = newFireRate;
+    }
+
+    // The two functions below are simple getter functions for current and max health respectively.
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }
