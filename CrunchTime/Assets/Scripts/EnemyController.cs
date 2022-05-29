@@ -21,6 +21,7 @@ public class EnemyController : MonoBehaviour
     private Seeker seeker;
     private Rigidbody2D rigidbody2d;
     private int pathStep;
+    public EnemyHealthBar enemyHealthBar;
 
 
     void Start()
@@ -33,6 +34,7 @@ public class EnemyController : MonoBehaviour
         InvokeRepeating("UpdatePath", 0f, 1f);
 
         currentHealth = maxHealth;
+        enemyHealthBar.SetHealth(currentHealth, maxHealth);
     }
 
     private void UpdatePath()
@@ -80,6 +82,7 @@ public class EnemyController : MonoBehaviour
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
+        enemyHealthBar.SetHealth(currentHealth, maxHealth);
 
         // Set vulnerability timer if damaged, or ensure max health is respected if healed.
         if (currentHealth > maxHealth)
