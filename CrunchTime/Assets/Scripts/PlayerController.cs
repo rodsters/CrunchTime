@@ -46,6 +46,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] static public float inaccuracy = 1.5f;
 
 
+    // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
+    [SerializeField] static public float damage = 5.0f;
+
+
     // To avoid counter-strike style bunnyhop shennanigans, decay and sustain are basically ignored and set to normal speed.
     [SerializeField] private float AttackDuration = 0.45f;
     [SerializeField] private AnimationCurve Attack;
@@ -586,6 +590,12 @@ public class PlayerController : MonoBehaviour
                 currentHealth = maxHealth;
             }
         }
+
+        if (currentHealth <= 0)
+        {
+            // Place a gameover trigger here.
+            Debug.Log("Game-Over here");
+        }
     }
 
     // Intended for HP upgrades (though also functional with downgrades), give the player a new max health and a full heal.
@@ -629,6 +639,11 @@ public class PlayerController : MonoBehaviour
     public void SetInaccuracy(float newInaccuracy)
     {
         inaccuracy = newInaccuracy;
+    }
+    // Intended for projectile upgrades/downgrades, give the player a new damage for each projectile.
+    public void SetDamage(float newDamage)
+    {
+        damage = newDamage;
     }
     // Intended for firing upgrades/downgrades, give the player a new firing rate.
     public void SetFireRate(float newFireRate)
