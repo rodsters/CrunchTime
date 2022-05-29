@@ -93,5 +93,14 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+    // The two functions below are simple getter functions for current and max health respectively.
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }
