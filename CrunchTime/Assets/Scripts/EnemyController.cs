@@ -78,10 +78,8 @@ public class EnemyController : MonoBehaviour
         {
             pathStep++;
         }
-
-        
     }
-
+    
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
@@ -98,10 +96,21 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
             AddTime(timeAdded);
         }
-    }
+    }    
     
     private void AddTime(float timeToAdd)
     {
         timer.setTime(timer.returnTime() + timeToAdd);
+    }
+    
+    // The two functions below are simple getter functions for current and max health respectively.
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+    
+    public float GetMaxHealth()
+    {
+        return maxHealth;
     }
 }
