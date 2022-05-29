@@ -9,6 +9,9 @@ public class EnemyController : MonoBehaviour
     private GameObject player;
     [SerializeField]
     private float speed = 2f;
+    [SerializeField]
+    private float maxHealth = 40.0f;
+    private float currentHealth;
 
     // Distance from a gridpoint to transition to the next step in the path
     private float nextStepDistance = 1f;
@@ -28,6 +31,8 @@ public class EnemyController : MonoBehaviour
         // Default destination is the player.
         destination = player.transform.position;
         InvokeRepeating("UpdatePath", 0f, 1f);
+
+        currentHealth = maxHealth;
     }
 
     private void UpdatePath()
@@ -71,4 +76,22 @@ public class EnemyController : MonoBehaviour
 
         
     }
+
+    public void ChangeEnemyHealth(float hitPointsToAdd)
+    {
+        currentHealth += hitPointsToAdd;
+
+        // Set vulnerability timer if damaged, or ensure max health is respected if healed.
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+
+        // If the enemy runs out of health, they die.
+        if (currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+    
 }

@@ -3251,12 +3251,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1775541690, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
       propertyPath: speed
-      value: 3
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 1775541690, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1582990298}
+    - target: {fileID: 1775541690, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
+      propertyPath: maxHealth
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 4973554436942681515, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -4165,12 +4169,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1775541690, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
       propertyPath: speed
-      value: 3
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 1775541690, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1582990298}
+    - target: {fileID: 1775541690, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
+      propertyPath: maxHealth
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 4973554436942681515, guid: 67867ab3e5b2174498c89ee2441603d3, type: 3}
       propertyPath: m_RootOrder
       value: 7

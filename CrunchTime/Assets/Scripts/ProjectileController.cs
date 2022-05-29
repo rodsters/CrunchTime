@@ -12,6 +12,7 @@ public class ProjectileController : MonoBehaviour
     // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
     float inaccuracy = PlayerController.inaccuracy;
+    float damage = PlayerController.damage;
 
     void Start()
     {
@@ -33,8 +34,22 @@ public class ProjectileController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.name != "RainbowMan")
+        Destroy(gameObject);
+    }
+
+    // This collision script allows enemies to behit by projectiles
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        // Deal damage to enemies that are hit.
+        if (other.gameObject.CompareTag("Enemy"))
         {
+            other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
+            Destroy(gameObject);
+        }
+        // If the player shoots an enemy projectile, then they canblockthe projectile from hitting.
+        if (other.gameObject.CompareTag("EnemyProjectile"))
+        {
+            Destroy(other);
             Destroy(gameObject);
         }
     }

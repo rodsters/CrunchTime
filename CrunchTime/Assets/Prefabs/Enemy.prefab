@@ -136,7 +136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  speed: 2
+  speed: 3.5
+  maxHealth: 0
 --- !u!114 &1775541696
 MonoBehaviour:
   m_ObjectHideFlags: 0
