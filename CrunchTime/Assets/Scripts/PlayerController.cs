@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public ProjectileController ProjectilePrefab;
 
     // Max vs current health. These are to be changes or accessed with several dedicated getter/sett functions. 
-    [SerializeField] float maxHealth = 20.0f;
+    [SerializeField] float maxHealth = 40.0f;
     float currentHealth;
 
     Rigidbody2D rigidbody2d;
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
     // Set to public for projectiles to access it, and it has a setter function.
-    [SerializeField] static public float inaccuracy = 1.5f;
+    [SerializeField] static public float inaccuracy = 2.25f;
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
     private float DualReleaseThreshold = 0.1f;
 
     // This timer controls whether or not Rainbowman currently has invulnerability frames active.
+    [SerializeField] private float invulnerabilityTime = 1.0f;
     private float InvulnerabilityTimer = 0.0f;
 
     // This timer controls the speed for HP regeneration. The rate is serialized and has a setter function in the case of upgrades.
@@ -557,12 +558,17 @@ public class PlayerController : MonoBehaviour
     // could be a variable amount stored in an enemyController script). This is called every frame it intersects with the player.
     private void OnTriggerStay2D(Collider2D other)
     {
+        // The Enemy tag only exists for backwards compatibility, I recommend using EnemyMelee instead.
         if (other.gameObject.CompareTag("Enemy")) {
             ChangeCurrentHealth(-10);
         }
-        if (other.gameObject.CompareTag("EnemyProjectile")) {
-            ChangeCurrentHealth(-5);
+        if (other.gameObject.CompareTag("EnemyMelee"))
+        {
+            ChangeCurrentHealth(-10);
         }
+        // Ranged enemies don't deal contact damage but shoot many projectiles.
+        // IMPORTANT NOTE: Projectiles deal damage in their own collider method so they destroy themselves and
+        // are able to deal variable damage to the player.
     }
 
     // Beginning of public interface functions:
@@ -582,7 +588,7 @@ public class PlayerController : MonoBehaviour
             // Set vulnerability timer if damaged, or ensure max health is respected if healed.
             if (hitPointsToAdd < 0)
             {
-                InvulnerabilityTimer = 0.5f;
+                InvulnerabilityTimer = invulnerabilityTime;
                 Debug.Log("Took Damage: " + hitPointsToAdd);
             }
             else if (currentHealth > maxHealth)
@@ -636,19 +642,33 @@ public class PlayerController : MonoBehaviour
     }
     // Intended for firing upgrades/downgrades, give the player a new angle of inaccuracy when firing.
     // This is recommended along with a heavy firing speed upgrade to make it a little more interesting.
-    public void SetInaccuracy(float newInaccuracy)
+    // If a multishot upgrade is implemented, this will go along well with it too.
+    public void ChangeInaccuracy(float newInaccuracy)
     {
-        inaccuracy = newInaccuracy;
+        inaccuracy += newInaccuracy;
+        if (inaccuracy < 0)
+        {
+            inaccuracy = 0;
+        }
     }
-    // Intended for projectile upgrades/downgrades, give the player a new damage for each projectile.
-    public void SetDamage(float newDamage)
+    // Intended for projectile upgrades/downgrades, multiply current damage by a specific multiplier.
+    public void ChangeDamage(float newDamageMultiplier)
     {
-        damage = newDamage;
+        damage *= newDamageMultiplier;
     }
-    // Intended for firing upgrades/downgrades, give the player a new firing rate.
-    public void SetFireRate(float newFireRate)
+    // Intended for firing upgrades/downgrades, multiply the speed of the current fire rate via division. Input a number
+    //  less than one for slower firing, or a number higher than one for that many times more projectiles per second.
+    public void ChangeFireRate(float newFireRateMultiplier)
     {
-        FireRate = newFireRate;
+        if (newFireRateMultiplier <= 0)
+        {
+            Debug.Log("no");
+        }
+        else
+        {
+            // The fire rate is divided because lower fire rates are faster.
+            FireRate = FireRate / newFireRateMultiplier;
+        }
     }
 
     // The two functions below are simple getter functions for current and max health respectively.
