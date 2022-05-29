@@ -83,9 +83,10 @@ public class PlayerController : MonoBehaviour
     private float RegenTimer = 0;
 
     // This timer controls the time for a player's dash. Time and speed are serialized and have setter functions for upgrades.
-    // Note that the player cannot dash again until DashTimer is less than (-dashTimeLength * 2), 
+    // Note that the player cannot dash again until DashTimer is less than (-dashCooldown * 3), 
     // something designed to prevent the player from infinitely dashing and therefore being completely invulnerable.
     [SerializeField] private float dashTimeLength = 0.25f;
+    [SerializeField] private float dashCooldown = 0.25f;
     private float DashTimer = 0;
     private bool isDashing = false;
     [SerializeField] private float dashSpeed = 22.5f;
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = maxHealth;
         RegenTimer = regenTimerRate;
-        DashTimer = (-3 * dashTimeLength);
+        DashTimer = (-3 * dashCooldown);
         normalSpeed = speed;
     }
 
@@ -163,7 +164,7 @@ public class PlayerController : MonoBehaviour
         angle = Vector2.SignedAngle(Vector2.down, direction) + 270;
 
         // This code allows a dash to begin if the player has waited about a while after having dashed.
-        if ((Input.GetButton("Fire2")) && (DashTimer <= (-3 * (dashTimeLength))))
+        if ((Input.GetButton("Fire2")) && (DashTimer <= (-3 * (dashCooldown))))
         {
             isDashing = true;
             DashTimer = dashTimeLength;
@@ -383,7 +384,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // This timer enforces the delay and duration. Unlike other timers, it decrements to it's negative maximum
-        if (DashTimer > (-3 * dashTimeLength))
+        if (DashTimer > (-3 * dashCooldown))
         {
             DashTimer -= Time.deltaTime;
         }

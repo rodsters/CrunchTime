@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Credits.unity
     guid: 2c49c7e1082865541a388f94923201b9
   - enabled: 1
-    path: Assets/Scenes/Main Scene But It Works.unity
+    path: Assets/Scenes/Dashing Health and EnemyDamage.unity
     guid: d220805027ee7c248bbdc57505d1a5a1
   - enabled: 1
     path: Assets/Scenes/HowToPlay.unity

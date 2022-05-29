@@ -3802,6 +3802,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   regenTimerRate: 2
   dashTimeLength: 0.25
+  dashCooldown: 0.25
   dashSpeed: 22.5
 --- !u!70 &1582990301
 CapsuleCollider2D:
