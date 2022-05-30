@@ -7245,5 +7245,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar
       objectReference: {fileID: 0}
+    - target: {fileID: 6234840582145452489, guid: 19c985778ec27c24db0d089c1acbae7c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19c985778ec27c24db0d089c1acbae7c, type: 3}
