@@ -10,6 +10,7 @@ TagManager:
   - EnemyRanged
   - Enemy
   - Wall
+  - Hazard
   layers:
   - Default
   - TransparentFX

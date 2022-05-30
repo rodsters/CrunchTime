@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
     bool hasRegenDebuff = false;
     bool hasFiringDebuff = false;
 
+    [SerializeField]
+    private float damageFromHazards = 7.5f;
+
     // This timer controls the time for a player's dash. Time and speed are serialized and have setter functions for upgrades.
     // Note that the player cannot dash again until DashTimer is less than (-dashCooldown * 3), 
     // something designed to prevent the player from infinitely dashing and therefore being completely invulnerable.
@@ -642,6 +645,11 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("EnemyMelee"))
         {
             ChangeCurrentHealth( -(other.gameObject.GetComponent<EnemyController>().GetDamage()) );
+        }
+        // This is for when the player walks into any tile on the hazards trial map
+        if (other.gameObject.CompareTag("Hazard"))
+        {
+            ChangeCurrentHealth(-damageFromHazards);
         }
         // Ranged enemies don't deal contact damage but shoot many projectiles.
         // IMPORTANT NOTE: Projectiles deal damage in their own collider method so they destroy themselves and
