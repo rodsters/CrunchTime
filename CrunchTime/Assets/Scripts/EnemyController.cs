@@ -32,7 +32,8 @@ public class EnemyController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
-    private float timeAdded = 15f;
+    [SerializeField]
+    private float timeAdded = 15.0f;
 
     [SerializeField] private float debuffTimerThrottle = 2.0f;
     private float DebuffTimer = 0;
@@ -159,7 +160,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // The two functions below are simple getter functions for current and max health respectively.
+    // The three functions below are simple getter functions.
     public float GetCurrentHealth()
     {
         return currentHealth;
@@ -167,6 +168,10 @@ public class EnemyController : MonoBehaviour
     public float GetMaxHealth()
     {
         return maxHealth;
+    }
+    public float GetDamage()
+    {
+        return damage;
     }
 
 }

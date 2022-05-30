@@ -48,7 +48,10 @@ public class EnemyProjectileController : MonoBehaviour
         {
             collision.gameObject.GetComponent<PlayerController>().ChangeCurrentHealth(-damage);
         }
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("EnemyProjectile") != true)
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Strengthen projectile if the player has entered crunch time. Deal +5 damage, +0-15 damage based on the negative time.

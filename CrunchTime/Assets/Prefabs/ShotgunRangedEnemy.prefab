@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 3582949390629034105}
   - component: {fileID: 1775541696}
   m_Layer: 8
-  m_Name: RangedEnemy
+  m_Name: ShotgunRangedEnemy
   m_TagString: EnemyRanged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -338,14 +338,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 2.5
-  lineOfSightSlowdown: 3
-  maxHealth: 30
-  FireRate: 0.8
-  numShots: 1
-  EnemyProjectilePrefab: {fileID: 3743154675497415246, guid: f2a7c5b90a37f6149b63f50e32ac30c5, type: 3}
+  lineOfSightSlowdown: 1.5
+  maxHealth: 45
+  FireRate: 3
+  numShots: 7
+  EnemyProjectilePrefab: {fileID: 3743154675497415246, guid: a84861e6bc1c04d41a4f7ebd05713b2d, type: 3}
   sightRange: 30
   enemyHealthBar: {fileID: 876339819068535422}
-  timeAdded: 8.5
+  canMelee: 0
+  meleeDamage: 0
+  timeAdded: 17.5
 --- !u!114 &1775541696
 MonoBehaviour:
   m_ObjectHideFlags: 0

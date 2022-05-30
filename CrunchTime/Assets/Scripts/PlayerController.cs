@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
-    [SerializeField] static public float damage = 5.0f;
+    [SerializeField] static public float damage = 3.35f;
 
 
     // To avoid counter-strike style bunnyhop shennanigans, decay and sustain are basically ignored and set to normal speed.
@@ -635,16 +635,17 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         // The Enemy tag only exists for backwards compatibility, I recommend using EnemyMelee instead.
+        // Every tag corresponds to a different kind of enemy controller script as we transition to multiple enemy types.
         if (other.gameObject.CompareTag("Enemy")) {
-            ChangeCurrentHealth(-10);
+            ChangeCurrentHealth( -(other.gameObject.GetComponent<EnemyController>().GetDamage()) );
         }
         if (other.gameObject.CompareTag("EnemyMelee"))
         {
-            ChangeCurrentHealth(-10);
+            ChangeCurrentHealth( -(other.gameObject.GetComponent<EnemyController>().GetDamage()) );
         }
         // Ranged enemies don't deal contact damage but shoot many projectiles.
         // IMPORTANT NOTE: Projectiles deal damage in their own collider method so they destroy themselves and
-        // are able to deal variable damage to the player.
+        // are able to deal variable damage to the player. Melee/Ranged enmies also do this.
     }
 
     // Beginning of public interface functions:
