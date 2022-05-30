@@ -28,7 +28,6 @@ public class EnemyController : MonoBehaviour
     private Seeker seeker;
     private Rigidbody2D rigidbody2d;
     private int pathStep;
-    public EnemyHealthBar enemyHealthBar;
 
     private GameObject gameManager;
     private Timer timer;
