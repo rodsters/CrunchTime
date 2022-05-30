@@ -28,11 +28,11 @@ public class EnemyController : MonoBehaviour
     private Seeker seeker;
     private Rigidbody2D rigidbody2d;
     private int pathStep;
+    public EnemyHealthBar enemyHealthBar;
 
     private GameObject gameManager;
     private Timer timer;
     private float timeAdded = 15f;
-
 
     void Start()
     {
@@ -88,7 +88,6 @@ public class EnemyController : MonoBehaviour
         {
             pathStep++;
         }
-
         // While we're at it, use the coordinate we just got to find the angle the enemy should turn to.
         Vector2 playerPosition = player.transform.position - transform.position;
         angle = Vector2.SignedAngle(Vector2.down, playerPosition) + 270;
@@ -101,7 +100,7 @@ public class EnemyController : MonoBehaviour
             sprite.flipX = false;
         }
     }
-
+    
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
@@ -118,9 +117,10 @@ public class EnemyController : MonoBehaviour
         {
             AddTime(timeAdded);
             Destroy(gameObject);
+            AddTime(timeAdded);
         }
-    }
-
+    }    
+    
     private void AddTime(float timeToAdd)
     {
         timer.setTime(timer.returnTime() + timeToAdd);
@@ -131,9 +131,9 @@ public class EnemyController : MonoBehaviour
     {
         return currentHealth;
     }
+    
     public float GetMaxHealth()
     {
         return maxHealth;
     }
-
 }
