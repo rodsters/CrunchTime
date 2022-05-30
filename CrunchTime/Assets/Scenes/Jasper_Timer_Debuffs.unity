@@ -3433,7 +3433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97136970d6b90a24fab56883457b30de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalTime: 600
+  totalTime: 180
   timerText: {fileID: 1843663228}
 --- !u!4 &808093915
 Transform:
@@ -4153,6 +4153,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 137429948682573813, guid: d0f44aef0f05505408e217a5818fd154, type: 3}
   maxHealth: 40
   FireRate: 0.25
+  normalInaccuracy: 2.25
   AttackDuration: 0.45
   Attack:
     serializedVersion: 2
@@ -4255,6 +4256,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   invulnerabilityTime: 0.75
   regenTimerRate: 2
+  debuffTimerThrottle: 2
   dashTimeLength: 0.25
   dashCooldown: 0.25
   dashSpeed: 22.5
