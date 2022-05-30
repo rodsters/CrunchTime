@@ -27,8 +27,7 @@ public class ProjectileController : MonoBehaviour
 
     void Update()
     {
-        // get mouse position
-        // Vector3 mousePos = Input.mousePosition;   
+        // Go in the original aimed direction each frame.
         transform.position += transform.right * Time.deltaTime * this.speed;
 
     }
@@ -40,10 +39,23 @@ public class ProjectileController : MonoBehaviour
     // This collision script allows enemies to behit by projectiles
     private void OnTriggerStay2D(Collider2D other)
     {
-        // Deal damage to enemies that are hit.
+        // The Enemy tag is not intended for use anymore (its too general when different tags have to exist between enemies).
+        // This exists for backwards compatibiltity.
         if (other.gameObject.CompareTag("Enemy"))
         {
             other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
+            Destroy(gameObject);
+        }
+        // Deal damage to enemies that are hit.
+        if (other.gameObject.CompareTag("EnemyMelee"))
+        {
+            other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
+            Destroy(gameObject);
+        }
+        // Deal damage to ranged enemies that are hit.
+        if (other.gameObject.CompareTag("EnemyRanged"))
+        {
+            other.GetComponent<RangedEnemyController>().ChangeEnemyHealth(-damage);
             Destroy(gameObject);
         }
         // If the player shoots an enemy projectile, then they canblockthe projectile from hitting.

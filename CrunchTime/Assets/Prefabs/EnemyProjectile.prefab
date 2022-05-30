@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 9034248828703923382}
   - component: {fileID: 1992045394002154124}
   - component: {fileID: 4081845461512838172}
-  - component: {fileID: 137429948682573813}
-  m_Layer: 6
-  m_Name: Projectile
-  m_TagString: PlayerProjectile
+  - component: {fileID: 3743154675497415246}
+  m_Layer: 9
+  m_Name: EnemyProjectile
+  m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,7 +71,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &137429948682573813
+--- !u!114 &3743154675497415246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,10 +80,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1023544077101245280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07e1c91981e80174e9e1602d94c171e9, type: 3}
+  m_Script: {fileID: 11500000, guid: dbff774d0404b9b4e908b59defa0bf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 14
+  speed: 7
+  damage: 7.5
+  inaccuracy: 5
 --- !u!1 &2658361032514210047
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4009522550520590164}
   - component: {fileID: 3025066077479457697}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
