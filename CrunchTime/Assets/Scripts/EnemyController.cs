@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
-    private int timeAdded = 15f;
+    private float timeAdded = 15f;
 
     void Start()
     {
