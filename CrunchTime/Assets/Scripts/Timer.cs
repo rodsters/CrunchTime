@@ -18,25 +18,28 @@ public class Timer : MonoBehaviour
         currentTime = totalTime;
     }
 
-// Functions to allow timer to be used as a currency.
-    void decreaseTime(float cost)
+// Functions to allow timer to be used as a currency (get and set functions).
+
+    public void setTime(float newTime)
     {
-        currentTime -= cost;
+        currentTime = newTime;
     }
 
-    void increaseTime(float bonus)
+    public float returnTime()
     {
-        currentTime += bonus;
+        return currentTime;
     }
 
     void Update()
     {
+        // Decrease time by 1 second constantly, and then calculate the minutes and seconds.
         currentTime -= Time.deltaTime;
         var minuteTime = Mathf.FloorToInt(currentTime/60);
         var secondTime = Mathf.FloorToInt(currentTime % 60);
         // Referenced https://answers.unity.com/questions/45676/making-a-timer-0000-minutes-and-seconds.html in order to make the text appear properly
         var timeString = minuteTime.ToString("00") + ":" + secondTime.ToString("00");
         timerText.text = timeString;
+        // The player can go into negative time, at negative three minutes they die.
         if (currentTime <=-180)
         {
             SceneManager.LoadScene("GameOver");

@@ -11,10 +11,14 @@ GameObject:
   - component: {fileID: 9034248828703923382}
   - component: {fileID: 1992045394002154124}
   - component: {fileID: 4081845461512838172}
-  - component: {fileID: 5525306879197168888}
+  - component: {fileID: 137429948682573813}
   m_Layer: 6
   m_Name: Projectile
+<<<<<<< HEAD
   m_TagString: Projectile
+=======
+  m_TagString: PlayerProjectile
+>>>>>>> main
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +66,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -71,7 +75,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5525306879197168888
+--- !u!114 &137429948682573813
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e1c91981e80174e9e1602d94c171e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 14
 --- !u!1 &2658361032514210047
 GameObject:
   m_ObjectHideFlags: 0

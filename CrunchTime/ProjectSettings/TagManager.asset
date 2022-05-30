@@ -4,7 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Projectile
+=======
+  - EnemyProjectile
+  - PlayerProjectile
+  - EnemyMelee
+  - EnemyRanged
+  - Enemy
+  - Wall
+>>>>>>> main
   layers:
   - Default
   - TransparentFX
@@ -14,8 +23,8 @@ TagManager:
   - UI
   - Projectile
   - Obstacle
-  - 
-  - 
+  - Enemy
+  - EnemyProjectile
   - 
   - 
   - 
