@@ -3,28 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-<<<<<<< HEAD
-  - Projectile
-=======
-  - EnemyProjectile
-  - PlayerProjectile
-  - EnemyMelee
-  - EnemyRanged
-  - Enemy
-  - Wall
->>>>>>> main
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Protagonist
+  - 
   - Water
   - UI
-  - Projectile
-  - Obstacle
-  - Enemy
-  - EnemyProjectile
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -50,7 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Projectile
-    uniqueID: 3390776877
     locked: 0

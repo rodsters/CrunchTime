@@ -10,7 +10,7 @@ public class DoorController : MonoBehaviour
     public Tilemap doorBlock;
 
     //create a list of boolean for each level
-    public Bool NewLevelUnlocked;
+    //public Bool NewLevelUnlocked;
 
 
     // Start is called before the first frame update
