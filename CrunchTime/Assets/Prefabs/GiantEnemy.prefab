@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 1775541690}
   - component: {fileID: 1775541696}
   m_Layer: 8
-  m_Name: Enemy
+  m_Name: GiantEnemy
   m_TagString: EnemyMelee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -528,12 +528,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  speed: 4
-  maxHealth: 50
-  damage: 10
+  speed: 2.5
+  maxHealth: 225
+  damage: 25
   enemyHealthBar: {fileID: 724092401}
-  timeAdded: 7.5
-  debuffTimerThrottle: 2
+  timeAdded: 30
+  debuffTimerThrottle: 1
 --- !u!114 &1775541696
 MonoBehaviour:
   m_ObjectHideFlags: 0
