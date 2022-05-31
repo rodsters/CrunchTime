@@ -38,7 +38,6 @@ public class EnemyController : MonoBehaviour
     private float DebuffTimer = 0;
     float currentTime = 180.0f;
 
-
     void Start()
     {
         this.rigidbody2d = GetComponent<Rigidbody2D>();
@@ -94,7 +93,6 @@ public class EnemyController : MonoBehaviour
         {
             pathStep++;
         }
-
         // While we're at it, use the coordinate we just got to find the angle the enemy should turn to.
         Vector2 playerPosition = player.transform.position - transform.position;
         angle = Vector2.SignedAngle(Vector2.down, playerPosition) + 270;
@@ -119,7 +117,7 @@ public class EnemyController : MonoBehaviour
             CheckForNegativeTime();
         }
     }
-
+    
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
@@ -136,9 +134,10 @@ public class EnemyController : MonoBehaviour
         {
             AddTime(timeAdded);
             Destroy(gameObject);
+            AddTime(timeAdded);
         }
-    }
-
+    }    
+    
     private void AddTime(float timeToAdd)
     {
         timer.setTime(timer.returnTime() + timeToAdd);
@@ -164,9 +163,9 @@ public class EnemyController : MonoBehaviour
     {
         return currentHealth;
     }
+    
     public float GetMaxHealth()
     {
         return maxHealth;
     }
-
 }
