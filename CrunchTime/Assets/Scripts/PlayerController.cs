@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
     // Set to public for projectiles to access it, and it has a setter function.
     [SerializeField] static public float inaccuracy = 2.25f;
+    // This is used by setters in the case of negative inaccuracy
+    [SerializeField] private float normalInaccuracy = 2.25f;
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
@@ -86,6 +88,15 @@ public class PlayerController : MonoBehaviour
     // This timer controls the speed for HP regeneration. The rate is serialized and has a setter function in the case of upgrades.
     [SerializeField] private float regenTimerRate = 2.0f;
     private float RegenTimer = 0;
+    private bool canRegen = true;
+
+
+    // This timer checks for debuffs from negative time. It has a throttle to prevent lag.
+    [SerializeField] private float debuffTimerThrottle = 2.0f;
+    private float DebuffTimer = 0;
+    float currentTime = 180;
+    bool hasRegenDebuff = false;
+    bool hasFiringDebuff = false;
 
     // This timer controls the time for a player's dash. Time and speed are serialized and have setter functions for upgrades.
     // Note that the player cannot dash again until DashTimer is less than (-dashCooldown * 3), 
@@ -104,6 +115,9 @@ public class PlayerController : MonoBehaviour
     private Phase CurrentPhaseVertical;
     private Phase CurrentPhaseHorizontal;
 
+    private GameObject gameManager;
+    private Timer timer;
+
     // Start is called before the first frame update.
     void Start()
     {
@@ -113,8 +127,9 @@ public class PlayerController : MonoBehaviour
         CurrentPhaseVertical = Phase.None;
         CurrentPhaseHorizontal = Phase.None;
         trail = GetComponent<TrailRenderer>();
-        trail.emitting = false;
-        trail.widthMultiplier = 0.75f;
+        gameManager = GameObject.Find("GameManager");
+        timer = gameManager.GetComponent<Timer>();
+
 
         // This set of two property changes slightly enhances collision so the player doesn't clip into walls.
         GetComponent<Rigidbody2D>().collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -124,6 +139,9 @@ public class PlayerController : MonoBehaviour
         RegenTimer = regenTimerRate;
         DashTimer = (-3 * dashCooldown);
         normalSpeed = speed;
+        normalInaccuracy = inaccuracy;
+        trail.emitting = false;
+        trail.widthMultiplier = 0.75f;
     }
 
     // Update is called once per frame.
@@ -201,10 +219,16 @@ public class PlayerController : MonoBehaviour
         }
 
         // Regenerate health between a customizeable delay
-        if (RegenTimer <= 0)
+        if (RegenTimer <= 0 && canRegen)
         {
             ChangeCurrentHealth(1.0f);
             RegenTimer = regenTimerRate;
+        }
+
+        // Check to reapply or unapply debuffs
+        if (DebuffTimer <= 0)
+        {
+            CheckForNegativeTime();
         }
 
         // If on the right side of the unit circle, else on the left side.
@@ -388,10 +412,16 @@ public class PlayerController : MonoBehaviour
             RegenTimer -= Time.deltaTime;
         }
 
-        // This timer enforces the delay and duration. Unlike other timers, it decrements to it's negative maximum
+        // This timer enforces the delay and duration. Unlike other timers, it decrements to it's negative maximum.
         if (DashTimer > (-3 * dashCooldown))
         {
             DashTimer -= Time.deltaTime;
+        }
+
+        // This timer enforces the the checking of negative time for applying debuffs (as well as unapplying them).
+        if (DebuffTimer > 0)
+        {
+            DebuffTimer -= Time.deltaTime;
         }
     }
 
@@ -554,6 +584,52 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // After every throttle period of seconds, the player will check if the current amount of time left is negative and how much.
+    // Depending on how much negative time is, the player will suffer temporary debuffs until the player gains neough time.
+    private void CheckForNegativeTime()
+    {
+        currentTime = timer.returnTime();
+
+        if (currentTime <= 0)
+        {
+            // TODO
+            // Apply a screen border effect to notify the player of negative time and also reduce view distance.
+        }
+        else
+        {
+            // Unapply that screen border effect
+        }
+
+        if (currentTime <= -60.0f && hasRegenDebuff == false)
+        {
+            hasRegenDebuff = true;
+            canRegen = false;
+        }
+        else if (currentTime > -60.0f && hasRegenDebuff == true)
+        {
+            hasRegenDebuff = false;
+            canRegen = true;
+        }
+
+        if (currentTime <= -120.0f)
+        {
+            ChangeFireRate(0.5f);
+            hasFiringDebuff = true;
+
+        }
+        else if (currentTime > -120.0f && hasFiringDebuff == true)
+        {
+            ChangeFireRate(2.0f);
+            hasFiringDebuff = false;
+        }
+
+        if (currentTime <= -180.0f)
+        {
+            // If the player reaches this point, they then immediately die.
+            currentHealth = 0;
+        }
+    }
+
     // This is a collision script for melee enemies and projectiles. The player takes a constant amount of damage (later it 
     // could be a variable amount stored in an enemyController script). This is called every frame it intersects with the player.
     private void OnTriggerStay2D(Collider2D other)
@@ -646,9 +722,17 @@ public class PlayerController : MonoBehaviour
     public void ChangeInaccuracy(float newInaccuracy)
     {
         inaccuracy += newInaccuracy;
+        normalInaccuracy = inaccuracy;
         if (inaccuracy < 0)
         {
             inaccuracy = 0;
+
+        }
+        // If the player dipped to negative inaccuracy, desyncing the normalInaccuracy, yet went back to positive
+        if (inaccuracy != normalInaccuracy && normalInaccuracy > 0)
+        {
+            inaccuracy = normalInaccuracy;
+
         }
     }
     // Intended for projectile upgrades/downgrades, multiply current damage by a specific multiplier.
@@ -669,6 +753,11 @@ public class PlayerController : MonoBehaviour
             // The fire rate is divided because lower fire rates are faster.
             FireRate = FireRate / newFireRateMultiplier;
         }
+    }
+    // Intended for projectile upgrades/downgrades, multiply current damage by a specific multiplier.
+    public void ChangeRegen(float newRegenMultiplier)
+    {
+        regenTimerRate *= newRegenMultiplier;
     }
 
     // The two functions below are simple getter functions for current and max health respectively.
