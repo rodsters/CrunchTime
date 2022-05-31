@@ -338,11 +338,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 2.5
+  lineOfSightSlowdown: 3
   maxHealth: 30
-  FireRate: 2
+  FireRate: 0.8
+  numShots: 1
   EnemyProjectilePrefab: {fileID: 3743154675497415246, guid: f2a7c5b90a37f6149b63f50e32ac30c5, type: 3}
   sightRange: 30
   enemyHealthBar: {fileID: 876339819068535422}
+  timeAdded: 8.5
 --- !u!114 &1775541696
 MonoBehaviour:
   m_ObjectHideFlags: 0

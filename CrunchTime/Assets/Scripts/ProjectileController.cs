@@ -13,6 +13,7 @@ public class ProjectileController : MonoBehaviour
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
     float inaccuracy = PlayerController.inaccuracy;
     float damage = PlayerController.damage;
+    bool hasDealtDamage = false;
 
     void Start()
     {
@@ -39,30 +40,38 @@ public class ProjectileController : MonoBehaviour
     // This collision script allows enemies to behit by projectiles
     private void OnTriggerStay2D(Collider2D other)
     {
-        // The Enemy tag is not intended for use anymore (its too general when different tags have to exist between enemies).
-        // This exists for backwards compatibiltity.
-        if (other.gameObject.CompareTag("Enemy"))
+        // Destroying an object takes time, so there is a boolean variable to prevent damaging multiple enemies at once.
+        if (hasDealtDamage == false)
         {
-            other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
-            Destroy(gameObject);
-        }
-        // Deal damage to enemies that are hit.
-        if (other.gameObject.CompareTag("EnemyMelee"))
-        {
-            other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
-            Destroy(gameObject);
-        }
-        // Deal damage to ranged enemies that are hit.
-        if (other.gameObject.CompareTag("EnemyRanged"))
-        {
-            other.GetComponent<RangedEnemyController>().ChangeEnemyHealth(-damage);
-            Destroy(gameObject);
-        }
-        // If the player shoots an enemy projectile, then they canblockthe projectile from hitting.
-        if (other.gameObject.CompareTag("EnemyProjectile"))
-        {
-            Destroy(other);
-            Destroy(gameObject);
+            // The Enemy tag is not intended for use anymore (its too general when different tags have to exist between enemies).
+            // This exists for backwards compatibiltity.
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
+                hasDealtDamage = true;
+                Destroy(gameObject);
+            }
+            // Deal damage to enemies that are hit.
+            if (other.gameObject.CompareTag("EnemyMelee"))
+            {
+                other.GetComponent<EnemyController>().ChangeEnemyHealth(-damage);
+                hasDealtDamage = true;
+                Destroy(gameObject);
+            }
+            // Deal damage to ranged enemies that are hit.
+            if (other.gameObject.CompareTag("EnemyRanged"))
+            {
+                other.GetComponent<RangedEnemyController>().ChangeEnemyHealth(-damage);
+                hasDealtDamage = true;
+                Destroy(gameObject);
+            }
+            // If the player shoots an enemy projectile, then they canblockthe projectile from hitting.
+            if (other.gameObject.CompareTag("EnemyProjectile"))
+            {
+                Destroy(other);
+                hasDealtDamage = true;
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - EnemyProjectile
+  - PlayerProjectile
+  - EnemyMelee
+  - EnemyRanged
+  - Enemy
+  - Wall
+  - Hazard
   layers:
   - Default
   - TransparentFX

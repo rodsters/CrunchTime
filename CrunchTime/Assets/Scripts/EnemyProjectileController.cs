@@ -9,7 +9,10 @@ public class EnemyProjectileController : MonoBehaviour
     [SerializeField] float damage = 7.5f;
     [SerializeField] float inaccuracy = 5.0f;
     GameObject player;
-    // Update is called once per frame
+
+    float currentTime = 180.0f;
+    private GameObject gameManager;
+    private Timer timer;
 
     Vector3 mousePosition;
     float angle;
@@ -25,6 +28,10 @@ public class EnemyProjectileController : MonoBehaviour
         angle = Vector2.SignedAngle(Vector2.right, direction);
         angle += Random.Range(-inaccuracy, inaccuracy);
         transform.eulerAngles = new Vector3(0, 0, angle);
+
+        gameManager = GameObject.Find("GameManager");
+        timer = gameManager.GetComponent<Timer>();
+        CheckForNegativeTime();
     }
 
     void Update()
@@ -41,6 +48,20 @@ public class EnemyProjectileController : MonoBehaviour
         {
             collision.gameObject.GetComponent<PlayerController>().ChangeCurrentHealth(-damage);
         }
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("EnemyProjectile") != true)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Strengthen projectile if the player has entered crunch time. Deal +5 damage, +0-15 damage based on the negative time.
+    private void CheckForNegativeTime()
+    {
+        currentTime = timer.returnTime();
+
+        if (currentTime <= 0)
+        {
+            damage = damage + 5 + (10 * (currentTime / 180.0f));
+        }
     }
 }
