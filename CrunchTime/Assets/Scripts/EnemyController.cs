@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
     private float maxHealth = 40.0f;
     [SerializeField]
     private float damage = 10f;
+    private float normalDamage;
     private float currentHealth;
     public EnemyHealthBar enemyHealthBar;
     [SerializeField]
@@ -47,7 +48,12 @@ public class EnemyController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
-    private float timeAdded = 15f;
+    [SerializeField]
+    private float timeAdded = 15.0f;
+
+    [SerializeField] private float debuffTimerThrottle = 2.0f;
+    private float DebuffTimer = 0;
+    float currentTime = 180.0f;
 
     void Start()
     {
@@ -61,6 +67,7 @@ public class EnemyController : MonoBehaviour
 
         currentHealth = maxHealth;
         enemyHealthBar.SetHealth(currentHealth, maxHealth);
+        normalDamage = damage;
     }
 
     private void UpdatePath()
@@ -171,6 +178,18 @@ public class EnemyController : MonoBehaviour
         {
             sprite.flipX = false;
         }
+
+
+
+        // Occasionally check for negative time to power up the enemy
+        if (DebuffTimer > 0)
+        {
+            DebuffTimer -= Time.deltaTime;
+        }
+        if (DebuffTimer <= 0)
+        {
+            CheckForNegativeTime();
+        }
     }
     
     public void ChangeEnemyHealth(float hitPointsToAdd)
@@ -198,7 +217,22 @@ public class EnemyController : MonoBehaviour
         timer.setTime(timer.returnTime() + timeToAdd);
     }
 
-    // The two functions below are simple getter functions for current and max health respectively.
+    // Strengthen enemy if the player has entered crunch time. The enemy deals +5 damage, +0-15 damage based on the negative time.
+    private void CheckForNegativeTime()
+    {
+        currentTime = timer.returnTime();
+
+        if (currentTime <= 0)
+        {
+            damage = normalDamage + 5 + (15 * (currentTime / 180.0f));
+        }
+        else
+        {
+            damage = normalDamage;
+        }
+    }
+
+    // The three functions below are simple getter functions.
     public float GetCurrentHealth()
     {
         return currentHealth;
@@ -207,6 +241,11 @@ public class EnemyController : MonoBehaviour
     public float GetMaxHealth()
     {
         return maxHealth;
+    }
+
+    public float GetDamage()
+    {
+        return damage;
     }
 
     void OnDrawGizmos()
@@ -234,4 +273,5 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, minSeparationDistance);
     }
+
 }

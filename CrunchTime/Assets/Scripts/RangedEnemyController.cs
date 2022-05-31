@@ -10,6 +10,9 @@ public class RangedEnemyController : MonoBehaviour
     [SerializeField]
     private float speed = 2.5f;
     private float normalSpeed = 2.5f;
+    // Enemies move this times slower when they get line of sight with the player.
+    [SerializeField]
+    private float lineOfSightSlowdown = 3;
     [SerializeField]
     private float maxHealth = 30.0f;
     private float currentHealth;
@@ -19,6 +22,8 @@ public class RangedEnemyController : MonoBehaviour
 
     [SerializeField]
     private float FireRate = 2.0f;
+    [SerializeField]
+    private int numShots;
     private float FireRateTimer = 0.0f;
     [SerializeField] public EnemyProjectileController EnemyProjectilePrefab;
 
@@ -29,6 +34,11 @@ public class RangedEnemyController : MonoBehaviour
     private float sightRange = 30.0f;
     private int layerMask;
     public EnemyHealthBar enemyHealthBar;
+
+    [SerializeField]
+    private bool canMelee = false;
+    [SerializeField]
+    private float meleeDamage = 0.0f;
 
     // Distance from a gridpoint to transition to the next step in the path
     private float nextStepDistance = 1f;
@@ -41,7 +51,8 @@ public class RangedEnemyController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
-    private float timeAdded = 15f;
+    [SerializeField]
+    private float timeAdded = 15.0f;
 
 
     void Start()
@@ -157,7 +168,7 @@ public class RangedEnemyController : MonoBehaviour
             FireRateTimer += Time.deltaTime;
             // Enemies slow down if they near the player, preventing them from just rushing the player like a melee enemy, yet
             // also not just having them go completely idle when the player is in sight range. Also helps in keeping sight range.
-            speed = normalSpeed / 3.0f;
+            speed = normalSpeed / lineOfSightSlowdown;
         }
         else
         {
@@ -168,8 +179,20 @@ public class RangedEnemyController : MonoBehaviour
 
         if (FireRateTimer >= FireRate)
         {
-            Instantiate(EnemyProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+            for (int i = 0; i < numShots; i++)
+            {
+                Instantiate(EnemyProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+            }
             FireRateTimer = 0;
+        }
+    }
+
+    // Melee and Ranged enemies can deal contact dmage to the player, but unlike other enemies do it from their own cs file.
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player") && canMelee)
+        {
+            other.gameObject.GetComponent<PlayerController>().ChangeCurrentHealth(-meleeDamage);
         }
     }
 
