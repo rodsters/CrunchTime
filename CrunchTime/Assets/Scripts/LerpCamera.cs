@@ -6,15 +6,7 @@ public class LerpCamera : AbstractCameraController
 {
 
     private Camera managedCamera;
-
     [SerializeField] public float lerpSpeed = 6;
-
-    // private Vector3 velocity = Vector3.zero;
-
-
-
-    private Vector3 previousPlayerPosition;
-
 
     private void Awake()
     {
