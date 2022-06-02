@@ -9,4 +9,3 @@ public abstract class AbstractCameraController : MonoBehaviour
     [SerializeField]
     protected GameObject target;
 }
-

@@ -12,6 +12,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float speed = 2f;
     private float maxSpeed = 0f;
+    private Transform target;
+    
+    [SerializeField]
+    private float maxSpeed = 4f;
+
     [SerializeField]
     private float maxHealth = 40.0f;
     [SerializeField]
@@ -19,6 +24,17 @@ public class EnemyController : MonoBehaviour
     private float normalDamage;
     private float currentHealth;
     public EnemyHealthBar enemyHealthBar;
+    [SerializeField]
+    // Radius at which to consider for avoiding an object.
+    private float visionRadius = 1.75f;
+    // Angle in degrees to consider for avoiding an object.
+    private float visionAngle = 180f;
+    // The number of vision 
+    private int visionRays = 19;
+
+    [SerializeField]
+    // Minimum distance allowed between objects for steering movement.
+    private float minSeparationDistance = 1f;
 
     [SerializeField]
     // Radius at which to consider for avoiding an object.
@@ -94,7 +110,7 @@ public class EnemyController : MonoBehaviour
         if (!p.error)
         {
             path = p;
-            pathStep = 0;
+            pathStep = 1;
         }
     }
 
@@ -122,7 +138,7 @@ public class EnemyController : MonoBehaviour
                 pathStep++;
             }
         }
-
+        
         // Ensure a unit length direction.
         direction = direction.normalized;
         float directionAngle = Vector2.SignedAngle(Vector2.right, direction);
@@ -163,9 +179,8 @@ public class EnemyController : MonoBehaviour
             //     // Steer toward the direction with the most open space within view.
             //     direction = rayDirection;
             // }
-
-
         }
+        
         // This steers to a direction that is biased against areas with large amounts of enemies/obstacles.
         direction = sumDirection.normalized;
         // Then, slow down if even this direction doesn't have space to move into based linearly on separation distance.
@@ -189,8 +204,6 @@ public class EnemyController : MonoBehaviour
         {
             sprite.flipX = false;
         }
-
-
 
         // Occasionally check for negative time to power up the enemy
         if (DebuffTimer > 0)
@@ -251,9 +264,10 @@ public class EnemyController : MonoBehaviour
             AddTime(timeAdded);
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
+            AddTime(timeAdded);
         }
-    }
-
+    }    
+    
     private void AddTime(float timeToAdd)
     {
         timer.setTime(timer.returnTime() + timeToAdd);
