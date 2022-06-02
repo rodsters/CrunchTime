@@ -12,11 +12,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float speed = 2f;
     private float maxSpeed = 0f;
-    private Transform target;
     
-    [SerializeField]
-    private float maxSpeed = 4f;
-
     [SerializeField]
     private float maxHealth = 40.0f;
     [SerializeField]
@@ -24,18 +20,6 @@ public class EnemyController : MonoBehaviour
     private float normalDamage;
     private float currentHealth;
     public EnemyHealthBar enemyHealthBar;
-    [SerializeField]
-    // Radius at which to consider for avoiding an object.
-    private float visionRadius = 1.75f;
-    // Angle in degrees to consider for avoiding an object.
-    private float visionAngle = 180f;
-    // The number of vision 
-    private int visionRays = 19;
-
-    [SerializeField]
-    // Minimum distance allowed between objects for steering movement.
-    private float minSeparationDistance = 1f;
-
     [SerializeField]
     // Radius at which to consider for avoiding an object.
     private float visionRadius = 1.75f;
