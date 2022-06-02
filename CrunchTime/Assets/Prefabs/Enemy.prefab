@@ -527,13 +527,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75cb3fe315e3f7544b5596569b7d6c5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  maxSpeed: 4
+  player: {fileID: 0}
+  SoundSystemObject: {fileID: 0}
+  speed: 4
   maxHealth: 50
   damage: 10
   enemyHealthBar: {fileID: 724092401}
   visionRadius: 1.75
-  minSeparationDistance: 0.85
+  minSeparationDistance: 1
   timeAdded: 7.5
   debuffTimerThrottle: 2
 --- !u!114 &1775541696
