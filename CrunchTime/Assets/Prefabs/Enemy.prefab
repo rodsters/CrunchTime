@@ -528,10 +528,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  SoundSystemObject: {fileID: 0}
   speed: 4
   maxHealth: 50
   damage: 10
   enemyHealthBar: {fileID: 724092401}
+  visionRadius: 1.75
+  minSeparationDistance: 1
   timeAdded: 7.5
   debuffTimerThrottle: 2
 --- !u!114 &1775541696

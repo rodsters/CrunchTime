@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private GameObject player;
     private Transform target;
+
     [SerializeField]
     private float speed = 2f;
     private float maxSpeed = 0f;
@@ -57,6 +58,8 @@ public class EnemyController : MonoBehaviour
     private float DebuffTimer = 0;
     float currentTime = 180.0f;
 
+    private SoundManager soundSystem;
+
     void Start()
     {
         target = player.transform;
@@ -65,6 +68,10 @@ public class EnemyController : MonoBehaviour
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
         sprite = GetComponent<SpriteRenderer>();
+
+        // To prevent linking to an incorrect sound system (remember that they survive scene transitions),
+        // objects link to the first sound system initialized on the creation of the project.
+        soundSystem = SoundManager.instance;
 
         InvokeRepeating("UpdatePath", 0f, 1f);
 
@@ -196,10 +203,41 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    void OnDrawGizmos()
+    {
+        // direction = direction.normalized;
+        // float directionAngle = Vector2.SignedAngle(Vector2.right, direction);
+        // // Now, bias the direction toward open space within the vision radius
+        // float bestRayDistance = 0f;
+        // for (int i = 0; i < visionRays; i++)
+        // {
+        //     float offsetMagnitude = ((i+1)/2) * (visionAngle / (visionRays-1));
+        //     // Debug.Log(offsetMagnitude);
+        //     float angleOffset = (i % 2 == 0) ? -offsetMagnitude : offsetMagnitude;
+        //     float rayAngle = (directionAngle + angleOffset) * Mathf.Deg2Rad;
+        //     Vector2 rayDirection = (new Vector2(Mathf.Cos(rayAngle), Mathf.Sin(rayAngle))).normalized;
+        //     Gizmos.DrawLine(transform.position, (Vector2)transform.position + rayDirection*visionRadius);
+        // }
+        Gizmos.DrawLine(transform.position, (Vector2)transform.position + direction * visionRadius);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, visionRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, minSeparationDistance);
+    }
+
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
         enemyHealthBar.SetHealth(currentHealth, maxHealth);
+
+        if (hitPointsToAdd < 0)
+        {
+            soundSystem.PlaySoundEffect("EnemyHit");
+        }
 
         // Set vulnerability timer if damaged, or ensure max health is respected if healed.
         if (currentHealth > maxHealth)
@@ -211,8 +249,8 @@ public class EnemyController : MonoBehaviour
         if (currentHealth <= 0)
         {
             AddTime(timeAdded);
+            soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
-            AddTime(timeAdded);
         }
     }
 
@@ -251,32 +289,5 @@ public class EnemyController : MonoBehaviour
     {
         return damage;
     }
-
-    void OnDrawGizmos()
-    {
-        // direction = direction.normalized;
-        // float directionAngle = Vector2.SignedAngle(Vector2.right, direction);
-        // // Now, bias the direction toward open space within the vision radius
-        // float bestRayDistance = 0f;
-        // for (int i = 0; i < visionRays; i++)
-        // {
-        //     float offsetMagnitude = ((i+1)/2) * (visionAngle / (visionRays-1));
-        //     // Debug.Log(offsetMagnitude);
-        //     float angleOffset = (i % 2 == 0) ? -offsetMagnitude : offsetMagnitude;
-        //     float rayAngle = (directionAngle + angleOffset) * Mathf.Deg2Rad;
-        //     Vector2 rayDirection = (new Vector2(Mathf.Cos(rayAngle), Mathf.Sin(rayAngle))).normalized;
-        //     Gizmos.DrawLine(transform.position, (Vector2)transform.position + rayDirection*visionRadius);
-        // }
-        Gizmos.DrawLine(transform.position, (Vector2)transform.position + direction * visionRadius);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, visionRadius);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, minSeparationDistance);
-    }
-
 }
 

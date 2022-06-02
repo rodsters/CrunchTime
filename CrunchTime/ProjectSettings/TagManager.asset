@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Wall
   - Hazard
+  - Music
   layers:
   - Default
   - TransparentFX

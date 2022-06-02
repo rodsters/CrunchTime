@@ -473,7 +473,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00025749, y: 0.0000083447}
+  m_AnchoredPosition: {x: -0.0002593994, y: 0.0000076293945}
   m_SizeDelta: {x: -0.00048828, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &754106241
@@ -1224,3 +1224,106 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118750845}
   m_CullTransparentMesh: 1
+--- !u!4 &2512094803144893456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2512094803144893458}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2512094803144893457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2512094803144893458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1ea419f054c414286121e639af8a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playTitleMusic: 1
+  musicMixerGroup: {fileID: 8179195646834110176, guid: 85895d2460034a241b18e8e21e238ea3, type: 2}
+  sfxMixerGroup: {fileID: -4829631766998906233, guid: 85895d2460034a241b18e8e21e238ea3, type: 2}
+  musicTracks:
+  - clip: {fileID: 8300000, guid: f0da68e5042b2f0478ead1b3fbe6b05d, type: 3}
+    audioSource: {fileID: 0}
+    title: Altar
+    volume: 0.6
+    pitch: 1
+    loop: 1
+  - clip: {fileID: 8300000, guid: 8e458f6e4ae60ec439f99473ced14362, type: 3}
+    audioSource: {fileID: 0}
+    title: CrunchTime
+    volume: 0.75
+    pitch: 1
+    loop: 1
+  - clip: {fileID: 8300000, guid: 42af6191e25871a46bc541c084b9e4ba, type: 3}
+    audioSource: {fileID: 0}
+    title: TestGen
+    volume: 0.4
+    pitch: 1
+    loop: 1
+  sfxClips:
+  - clip: {fileID: 8300000, guid: ed2676282010ebb4b9ddeb094bc2a25e, type: 3}
+    audioSource: {fileID: 0}
+    title: Shooting
+    volume: 0.06
+    pitch: 1.5
+    loop: 0
+  - clip: {fileID: 8300000, guid: a762c4e2efc6d00488510b5b77137ef5, type: 3}
+    audioSource: {fileID: 0}
+    title: EnemyDeath
+    volume: 0.173
+    pitch: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: c52e3f848ddebfd44b2d7ebf7d83f210, type: 3}
+    audioSource: {fileID: 0}
+    title: Dash
+    volume: 0.2
+    pitch: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: ebe3f7aaaf2b0a84e96f22d7f2965ba6, type: 3}
+    audioSource: {fileID: 0}
+    title: EnemyHit
+    volume: 0.065
+    pitch: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: 075207aa0bf99554f98d32a8b3816a14, type: 3}
+    audioSource: {fileID: 0}
+    title: PlayerHit
+    volume: 0.19
+    pitch: 0.6
+    loop: 0
+  trackPlaying:
+    clip: {fileID: 0}
+    audioSource: {fileID: 0}
+    title: 
+    volume: 1
+    pitch: 1
+    loop: 1
+--- !u!1 &2512094803144893458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2512094803144893456}
+  - component: {fileID: 2512094803144893457}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1

@@ -121,6 +121,11 @@ public class PlayerController : MonoBehaviour
     private GameObject gameManager;
     private Timer timer;
 
+    [SerializeField]
+    private GameObject SoundSystemObject;
+    private SoundManager soundSystem;
+    private bool playingNegativeTimeMusic;
+
     // Start is called before the first frame update.
     void Start()
     {
@@ -132,7 +137,9 @@ public class PlayerController : MonoBehaviour
         trail = GetComponent<TrailRenderer>();
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
-
+        // Note the .instance, The first SoundManager created always puts itself in this static variable as the main music player.
+        soundSystem = SoundManager.instance;
+        soundSystem.PlayMusicTrack("CrunchTime");
 
         // This set of two property changes slightly enhances collision so the player doesn't clip into walls.
         GetComponent<Rigidbody2D>().collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -160,6 +167,7 @@ public class PlayerController : MonoBehaviour
         // of the two buttons, repeating fire every time the FireRateTimer reaches 0.
         if ( (Input.GetButton("Jump") || Input.GetButton("Fire1")) && FireRateTimer <= 0 )
         {
+            soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
             Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
         }
@@ -167,6 +175,7 @@ public class PlayerController : MonoBehaviour
         // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
         else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && ( FireRateTimer - (FireRate/2.75f) ) <= 0)
         {
+            soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
             Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
         }
@@ -192,6 +201,7 @@ public class PlayerController : MonoBehaviour
         // This code allows a dash to begin if the player has waited about a while after having dashed.
         if ((Input.GetButton("Fire2")) && (DashTimer <= (-3 * (dashCooldown))))
         {
+            soundSystem.PlaySoundEffect("Dash");
             isDashing = true;
             DashTimer = dashTimeLength;
             // The player should be invulnerable during dashes to dodge projectiles or enemy attacks.
@@ -588,7 +598,8 @@ public class PlayerController : MonoBehaviour
     }
 
     // After every throttle period of seconds, the player will check if the current amount of time left is negative and how much.
-    // Depending on how much negative time is, the player will suffer temporary debuffs until the player gains neough time.
+    // Depending on how much negative time is, the player will suffer temporary debuffs until the player gains enough time.
+    // This script is also responsible for playing music for negative time (only if we don't have a second floor).
     private void CheckForNegativeTime()
     {
         currentTime = timer.returnTime();
@@ -631,6 +642,24 @@ public class PlayerController : MonoBehaviour
             // If the player reaches this point, they then immediately die.
             currentHealth = 0;
         }
+
+
+        // NOTE: Remove this if else statement if we add a second floor.
+        if (currentTime <= 0.0f && playingNegativeTimeMusic == false)
+        {
+            soundSystem.PlayMusicTrack("TestGen");
+            playingNegativeTimeMusic = true;
+        }
+        else if (currentTime > 30.0f && playingNegativeTimeMusic)
+        {
+            // To avoid spastic music changes, there is a threshold to stop playing the negative time music
+            // Because the shop stops the timer, this will not break shop music.
+            playingNegativeTimeMusic = false;
+            // This is the normal music track
+            soundSystem.PlayMusicTrack("CrunchTime");
+        }
+
+        // Shop music is handeled by other scripts besides being played on gameover.
     }
 
     // This is a collision script for melee enemies and projectiles. The player takes a constant amount of damage (later it 
@@ -675,6 +704,7 @@ public class PlayerController : MonoBehaviour
             {
                 InvulnerabilityTimer = invulnerabilityTime;
                 Debug.Log("Took Damage: " + hitPointsToAdd);
+                soundSystem.PlaySoundEffect("PlayerHit");
             }
             else if (currentHealth > maxHealth)
             {
@@ -684,8 +714,9 @@ public class PlayerController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            // Place a gameover trigger here.
             Debug.Log("Game-Over here");
+            // The gameover music is shared with title and shop music.
+            soundSystem.PlayMusicTrack("Altar");
         }
     }
 

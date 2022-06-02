@@ -7,9 +7,12 @@ public class RangedEnemyController : MonoBehaviour
 {
     [SerializeField]
     private GameObject player;
+    private Transform target;
+
     [SerializeField]
     private float speed = 2.5f;
     private float normalSpeed = 2.5f;
+    private float maxSpeed = 0f;
     // Enemies move this times slower when they get line of sight with the player.
     [SerializeField]
     private float lineOfSightSlowdown = 3;
@@ -17,8 +20,26 @@ public class RangedEnemyController : MonoBehaviour
     private float maxHealth = 30.0f;
     private float currentHealth;
 
+    [SerializeField]
+    // Radius at which to consider for avoiding an object.
+    private float visionRadius = 1.75f;
+    // Angle in degrees to consider for avoiding an object.
+    private float visionAngle = 180f;
+    // The number of vision 
+    private int visionRays = 19;
+
+    [SerializeField]
+    // Minimum distance allowed between objects for steering movement.
+    private float minSeparationDistance = 1f;
+
     private float angle;
     private SpriteRenderer sprite;
+
+    // Movement direction should be fairly continuous in change over time.
+    // This direction is used as a basis for flocking/steering. Thus, if
+    // there is no bias direction found from line of sight or A*, then use 
+    // the previous direction of movement.
+    private Vector2 direction = Vector2.zero;
 
     [SerializeField]
     private float FireRate = 2.0f;
@@ -27,7 +48,7 @@ public class RangedEnemyController : MonoBehaviour
     private float FireRateTimer = 0.0f;
     [SerializeField] public EnemyProjectileController EnemyProjectilePrefab;
 
-    Vector2 rayDirection;
+    Vector2 rangedRayDirection;
     private RaycastHit2D VisibleObject;
     private bool hasLineOfSight = false;
     [SerializeField]
@@ -44,7 +65,6 @@ public class RangedEnemyController : MonoBehaviour
     private float nextStepDistance = 1f;
 
     private Path path;
-    private Vector2 destination;
     private Seeker seeker;
     private Rigidbody2D rigidbody2d;
     private int pathStep;
@@ -54,21 +74,26 @@ public class RangedEnemyController : MonoBehaviour
     [SerializeField]
     private float timeAdded = 15.0f;
 
+    private SoundManager soundSystem;
 
     void Start()
     {
+        target = player.transform;
         this.rigidbody2d = GetComponent<Rigidbody2D>();
         this.seeker = GetComponent<Seeker>();
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
         sprite = GetComponent<SpriteRenderer>();
 
-        // Default destination is the player.
-        destination = player.transform.position;
+        // To prevent linking to an incorrect sound system (remember that they survive scene transitions),
+        // objects link to the first sound system initialized on the creation of the project.
+        soundSystem = SoundManager.instance;
+
         InvokeRepeating("UpdatePath", 0f, 1f);
 
         currentHealth = maxHealth;
         normalSpeed = speed;
+        maxSpeed = speed;
 
         // Creating a layer mask and add another layer to it. The notation looks really weird with |= but don't worry about it.
         // A layer mask just specified the only layers the raycast should pay attention to. In this case, it should only look for
@@ -84,7 +109,7 @@ public class RangedEnemyController : MonoBehaviour
     {
         if (seeker.IsDone())
         {
-            seeker.StartPath(this.rigidbody2d.position, destination, OnPathComplete);
+            seeker.StartPath(this.rigidbody2d.position, target.position, OnPathComplete);
         }
     }
 
@@ -99,30 +124,87 @@ public class RangedEnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Must have a path to move.
-        if (path == null || pathStep == path.vectorPath.Count)
+        // Prioritize moving directly to target if it is in sight.
+        Vector2 targetPosition = target.position - transform.position;
+        int obstacleMask = LayerMask.GetMask("Obstacle");
+        bool hasTargetVision = Physics2D.Raycast(transform.position, targetPosition.normalized, targetPosition.magnitude, obstacleMask).collider == null;
+
+        // First determine an initial direction for steering.
+        // Easiest ot use line of sight position tracking for target close by.
+        if (hasTargetVision)
         {
-            return;
+            direction = targetPosition;
+        }
+        // If no line of sight, must have a path to follow when using A*.
+        else if (path != null && pathStep < path.vectorPath.Count)
+        {
+            direction = (path.vectorPath[pathStep] - transform.position);
+
+            float distanceToGridPoint = Vector2.Distance(transform.position, (Vector2)path.vectorPath[pathStep]);
+            if (distanceToGridPoint < nextStepDistance)
+            {
+                pathStep++;
+            }
         }
 
-        // Move toward the player for simple enemy.
-        destination = player.transform.position;
-        
-        Vector2 direction = (path.vectorPath[pathStep] - this.transform.position).normalized;
-        Vector2 nextPosition = (Vector2)this.transform.position + direction * speed * Time.deltaTime;
+        // Ensure a unit length direction.
+        direction = direction.normalized;
+        float directionAngle = Vector2.SignedAngle(Vector2.right, direction);
+        // Now, bias the direction toward open space within the vision radius
+        // float bestRayDistance = 0f;
+        int avoidanceMask = LayerMask.GetMask(new string[] { "Enemy", "Obstacle" });
+        Vector2 sumDirection = Vector2.zero;
+        for (int i = 0; i < visionRays; i++)
+        {
+            float offsetMagnitude = ((i + 1) / 2) * (visionAngle / (visionRays - 1));
+            // Debug.Log(offsetMagnitude);
+            float angleOffset = (i % 2 == 0) ? -offsetMagnitude : offsetMagnitude;
+            float rayAngle = (directionAngle + angleOffset) * Mathf.Deg2Rad;
+            Vector2 rayDirection = (new Vector2(Mathf.Cos(rayAngle), Mathf.Sin(rayAngle))).normalized;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, visionRadius, avoidanceMask);
+
+            float fractionalDirection = 1;
+            if (hit.collider != null)
+            {
+                fractionalDirection = ((hit.distance - minSeparationDistance) / (visionRadius - minSeparationDistance));
+            }
+
+            if (fractionalDirection < 0 && hit.collider.gameObject.layer == 7)
+            {
+                // Strongly avoid if it is an obstacle.
+                fractionalDirection = -2;
+            }
+            else if (fractionalDirection < 0)
+            {
+                fractionalDirection = 0;
+            }
+            sumDirection += rayDirection * fractionalDirection;
+            // else if (hit.distance > bestRayDistance)
+            // {
+            //     Debug.Log(hit.collider);
+            //     Debug.Log(hit.distance);
+            //     bestRayDistance = hit.distance;
+            //     // Steer toward the direction with the most open space within view.
+            //     direction = rayDirection;
+            // }
+
+
+        }
+        // This steers to a direction that is biased against areas with large amounts of enemies/obstacles.
+        direction = sumDirection.normalized;
+        // Then, slow down if even this direction doesn't have space to move into based linearly on separation distance.
+        RaycastHit2D directHit = Physics2D.Raycast(transform.position, direction, visionRadius, avoidanceMask);
+        float speed = maxSpeed;
+        if (directHit.collider != null)
+        {
+            speed = maxSpeed * (Mathf.Max(directHit.distance - minSeparationDistance, 0) / (visionRadius - minSeparationDistance));
+        }
+
+        Vector2 nextPosition = (Vector2)transform.position + direction * speed * Time.deltaTime;
         this.rigidbody2d.MovePosition(nextPosition);
 
-
-
-        float distanceToGridPoint = Vector2.Distance(this.rigidbody2d.position, (Vector2)path.vectorPath[pathStep]);
-        
-        if (distanceToGridPoint < nextStepDistance)
-        {
-            pathStep++;
-        }
-
         // While we're at it, use the coordinate we just got to find the angle the enemy should turn to.
-        angle = Vector2.SignedAngle(Vector2.down, destination) + 270;
+        angle = Vector2.SignedAngle(Vector2.down, targetPosition) + 270;
         if ((angle) > 90 && (angle) <= 270)
         {
             sprite.flipX = true;
@@ -132,10 +214,12 @@ public class RangedEnemyController : MonoBehaviour
             sprite.flipX = false;
         }
 
+        // - End of Pathfinding Code -
+
         // The enemy uses raycsting to see if the player is visible. It takes the player's direction, fires a "ray,"
         // and if there is nothing obstructing the player from the enemy, then the enemy has line of sight.
-        Vector2 rayDirection = player.transform.position - transform.position;
-        if (VisibleObject = Physics2D.Raycast(transform.position, rayDirection, sightRange, layerMask))
+        Vector2 rangedRayDirection = player.transform.position - transform.position;
+        if (VisibleObject = Physics2D.Raycast(transform.position, rangedRayDirection, sightRange, layerMask))
         {
             if (VisibleObject.transform != null)
             {
@@ -152,7 +236,7 @@ public class RangedEnemyController : MonoBehaviour
 
         // While we're at it, use the coordinate we just got to find the angle the enemy should turn to.
         // Shooting enemies always turn towards the player.
-        angle = Vector2.SignedAngle(Vector2.down, rayDirection) + 270;
+        angle = Vector2.SignedAngle(Vector2.down, rangedRayDirection) + 270;
         if ((angle) > 90 && (angle) <= 270)
         {
             sprite.flipX = true;
@@ -185,6 +269,7 @@ public class RangedEnemyController : MonoBehaviour
             }
             FireRateTimer = 0;
         }
+
     }
 
     // Melee and Ranged enemies can deal contact dmage to the player, but unlike other enemies do it from their own cs file.
@@ -196,10 +281,41 @@ public class RangedEnemyController : MonoBehaviour
         }
     }
 
+    void OnDrawGizmos()
+    {
+        // direction = direction.normalized;
+        // float directionAngle = Vector2.SignedAngle(Vector2.right, direction);
+        // // Now, bias the direction toward open space within the vision radius
+        // float bestRayDistance = 0f;
+        // for (int i = 0; i < visionRays; i++)
+        // {
+        //     float offsetMagnitude = ((i+1)/2) * (visionAngle / (visionRays-1));
+        //     // Debug.Log(offsetMagnitude);
+        //     float angleOffset = (i % 2 == 0) ? -offsetMagnitude : offsetMagnitude;
+        //     float rayAngle = (directionAngle + angleOffset) * Mathf.Deg2Rad;
+        //     Vector2 rayDirection = (new Vector2(Mathf.Cos(rayAngle), Mathf.Sin(rayAngle))).normalized;
+        //     Gizmos.DrawLine(transform.position, (Vector2)transform.position + rayDirection*visionRadius);
+        // }
+        Gizmos.DrawLine(transform.position, (Vector2)transform.position + direction * visionRadius);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, visionRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, minSeparationDistance);
+    }
+
     public void ChangeEnemyHealth(float hitPointsToAdd)
     {
         currentHealth += hitPointsToAdd;
         enemyHealthBar.SetHealth(currentHealth, maxHealth);
+
+        if (hitPointsToAdd < 0)
+        {
+            soundSystem.PlaySoundEffect("EnemyHit");
+        }
 
         // Set vulnerability timer if damaged, or ensure max health is respected if healed.
         if (currentHealth > maxHealth)
@@ -211,6 +327,7 @@ public class RangedEnemyController : MonoBehaviour
         if (currentHealth <= 0)
         {
             AddTime(timeAdded);
+            soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
         }
     }
