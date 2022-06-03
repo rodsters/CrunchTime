@@ -1,6 +1,7 @@
 // Initial Idea:
 // https://gist.github.com/satanas/5766d9d9d34f94be25cb0f85ffc50ad1
 
+// Harrison Nguyen
 // Poor scrolling background. Other idea: Background is image of dungeon.
 
  using UnityEngine;
