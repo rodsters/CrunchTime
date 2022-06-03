@@ -5,9 +5,9 @@ using Pathfinding;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField]
-    public GameObject globalStateGO; 
-    private GlobalGameState globalGameState;
+    //[SerializeField]
+    //public GameObject globalStateGO; 
+    //private GlobalGameState globalGameState;
 
 
     private GameObject player;
@@ -55,6 +55,8 @@ public class EnemyController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
+    private EnemyTracker  enemyTracker;
+
     [SerializeField]
     private float timeAdded = 15.0f;
 
@@ -66,14 +68,17 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+        //GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
 
         player = GameObject.Find("RainbowMan");
         target = player.transform;
         this.rigidbody2d = GetComponent<Rigidbody2D>();
         this.seeker = GetComponent<Seeker>();
+
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
+        enemyTracker = gameManager.GetComponent<EnemyTracker>();
+
         sprite = this.transform.Find("EnemyAnimator").gameObject.GetComponent<SpriteRenderer>();
         this.GetComponent<SpriteRenderer>().enabled = false;
 
@@ -257,8 +262,12 @@ public class EnemyController : MonoBehaviour
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
             AddTime(timeAdded);
-            globalGameState.DecrementEnemies();
-            Debug.Log("decrement enemies : "+ globalGameState.getNumEnemies());
+            
+            enemyTracker.DecrementEnemies();
+            Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
+
+            //GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+           // globalGameState.DecrementEnemies();
 
         }
     }    

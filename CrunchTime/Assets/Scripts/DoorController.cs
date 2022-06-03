@@ -7,9 +7,8 @@ using UnityEngine.Tilemaps;
 public class DoorController : MonoBehaviour
 {
 
-    [SerializeField]
-    public GameObject globalStateGO; 
-    private GlobalGameState globalGameState;
+    //[SerializeField]
+    //public GameObject globalStateGO; 
 
     [SerializeField]
     public Tilemap tileMap;
@@ -20,7 +19,10 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     public bool destroy = false;
 
-    public int numEnemies;
+
+    private GameObject gameManager;
+
+    private EnemyTracker  enemyTracker;
 
      
     //create a list of boolean for each level
@@ -31,14 +33,16 @@ public class DoorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {  
-        globalGameState = globalStateGO.GetComponent<GlobalGameState>();
 
-
-        tileMap = transform.GetComponentInParent<Tilemap>();
-        availablePlaces = new List<Vector3>();
+        gameManager = GameObject.Find("GameManager");
+        enemyTracker = gameManager.GetComponent<EnemyTracker>();
  
         // TODO : FIND THE CITATION FOR THIS DO NOT FORGET 
-        // if the link is missing, remind amaan to find the resource where he fount this from
+        // https://forum.unity.com/threads/tilemap-tile-positions-assistance.485867/
+        // by username: DDaddySupreme https://forum.unity.com/members/ddaddysupreme.1403037/
+        tileMap = transform.GetComponentInParent<Tilemap>();
+        availablePlaces = new List<Vector3>();
+
         for (int n = tileMap.cellBounds.xMin; n < tileMap.cellBounds.xMax; n++)
         {
             for (int p = tileMap.cellBounds.yMin; p < tileMap.cellBounds.yMax; p++)
@@ -57,6 +61,8 @@ public class DoorController : MonoBehaviour
             }
         }
 
+
+
     }
 
     //TODO : We need to cite this 
@@ -67,9 +73,14 @@ public class DoorController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {       
-        if(collision.gameObject.tag == "Player"){   
-            if(globalGameState.getNumEnemies() <= 0 )
+    private void OnCollisionEnter2D(Collision2D collision) {    
+
+        //Debug.Log(globalGameState.getNumEnemies());   
+        if(collision.gameObject.tag == "Player"){  
+
+           // GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+
+            if(enemyTracker.getNumEnemies() <= 0 )
             {
                 foreach (var pos in availablePlaces)
                 {   
