@@ -5,7 +5,6 @@ using Pathfinding;
 
 public class RangedEnemyController : MonoBehaviour
 {
-    [SerializeField]
     private GameObject player;
     private Transform target;
 
@@ -78,12 +77,14 @@ public class RangedEnemyController : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.Find("RainbowMan");
         target = player.transform;
         this.rigidbody2d = GetComponent<Rigidbody2D>();
         this.seeker = GetComponent<Seeker>();
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
-        sprite = GetComponent<SpriteRenderer>();
+        sprite = this.transform.Find("EnemyAnimator").gameObject.GetComponent<SpriteRenderer>();
+        this.GetComponent<SpriteRenderer>().enabled = false;
 
         // To prevent linking to an incorrect sound system (remember that they survive scene transitions),
         // objects link to the first sound system initialized on the creation of the project.

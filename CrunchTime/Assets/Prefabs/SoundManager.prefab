@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2512094803150875425
+--- !u!1 &8886373600067605588
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2512094803150875427}
-  - component: {fileID: 2512094803150875426}
+  - component: {fileID: 8886373600067605590}
+  - component: {fileID: 8886373600067605591}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2512094803150875427
+--- !u!4 &8886373600067605590
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2512094803150875425}
+  m_GameObject: {fileID: 8886373600067605588}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,13 +31,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2512094803150875426
+--- !u!114 &8886373600067605591
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2512094803150875425}
+  m_GameObject: {fileID: 8886373600067605588}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a1ea419f054c414286121e639af8a51, type: 3}
@@ -50,19 +50,19 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: f0da68e5042b2f0478ead1b3fbe6b05d, type: 3}
     audioSource: {fileID: 0}
     title: Altar
-    volume: 0.75
+    volume: 0.6
     pitch: 1
     loop: 1
   - clip: {fileID: 8300000, guid: 8e458f6e4ae60ec439f99473ced14362, type: 3}
     audioSource: {fileID: 0}
     title: CrunchTime
-    volume: 1
+    volume: 0.75
     pitch: 1
     loop: 1
   - clip: {fileID: 8300000, guid: 42af6191e25871a46bc541c084b9e4ba, type: 3}
     audioSource: {fileID: 0}
     title: TestGen
-    volume: 0.5
+    volume: 0.4
     pitch: 1
     loop: 1
   sfxClips:
@@ -87,7 +87,7 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: ebe3f7aaaf2b0a84e96f22d7f2965ba6, type: 3}
     audioSource: {fileID: 0}
     title: EnemyHit
-    volume: 0.65
+    volume: 0.065
     pitch: 1
     loop: 0
   - clip: {fileID: 8300000, guid: 075207aa0bf99554f98d32a8b3816a14, type: 3}
@@ -95,6 +95,12 @@ MonoBehaviour:
     title: PlayerHit
     volume: 0.19
     pitch: 0.6
+    loop: 0
+  - clip: {fileID: 8300000, guid: ebe3f7aaaf2b0a84e96f22d7f2965ba6, type: 3}
+    audioSource: {fileID: 0}
+    title: WallHit
+    volume: 0.04
+    pitch: 1
     loop: 0
   trackPlaying:
     clip: {fileID: 0}

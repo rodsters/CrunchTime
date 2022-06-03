@@ -120,9 +120,8 @@ public class PlayerController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
+    private GameObject BlindnessEffect;
 
-    [SerializeField]
-    private GameObject SoundSystemObject;
     private SoundManager soundSystem;
     private bool playingNegativeTimeMusic;
 
@@ -145,6 +144,14 @@ public class PlayerController : MonoBehaviour
         GetComponent<Rigidbody2D>().collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         GetComponent<Rigidbody2D>().interpolation = RigidbodyInterpolation2D.Extrapolate;
 
+
+        // Blindness is scrapped for now because it obliterates the game's FPS
+
+        // This is done to not crowd the editor but have the overlay in the right position upon playing.
+        //BlindnessEffect = GameObject.Find("Blind");
+        //BlindnessEffect.transform.position = this.transform.position;
+        //BlindnessEffect.SetActive(false);
+
         currentHealth = maxHealth;
         RegenTimer = regenTimerRate;
         DashTimer = (-3 * dashCooldown);
@@ -157,6 +164,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame.
     void Update()
     {
+        Debug.Log( (int)(1f / Time.unscaledDeltaTime) );
         // Decrement all timers in real timer every Update() frame (like regneration, invulnerability, and movement stage timers).
         DecrementTimers();
 
@@ -606,7 +614,9 @@ public class PlayerController : MonoBehaviour
 
         if (currentTime <= 0)
         {
-            // TODO
+            // Unimplemented for now because the blindness effect obliterates the game's frame rate.
+            // For now, the player is notified of crunch time with the music change.
+
             // Apply a screen border effect to notify the player of negative time and also reduce view distance.
         }
         else
@@ -808,6 +818,10 @@ public class PlayerController : MonoBehaviour
     public float GetMaxHealth()
     {
         return maxHealth;
+    }
+    public float GetDashTimer()
+    {
+        return DashTimer;
     }
 
 }

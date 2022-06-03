@@ -13,6 +13,9 @@ using UnityEngine.Audio;
  * https://openai.com/blog/musenet/
  * 
  * CC0 SFX from "rubberduck" on OpenGameArt
+ * 
+ * The soundfont used for the 3 songs that are used can be found here:
+ * https://musical-artifacts.com/artifacts/23
  */
 
 public class SoundManager : MonoBehaviour

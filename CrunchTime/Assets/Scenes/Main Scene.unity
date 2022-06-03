@@ -1359,6 +1359,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1105437408}
   m_CullTransparentMesh: 1
+--- !u!1001 &1112408399
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2512094803150875425, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2512094803150875427, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 99fee2c63d85d33439e5907683859dab, type: 3}
 --- !u!1 &1359932075
 GameObject:
   m_ObjectHideFlags: 0
@@ -6641,6 +6698,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 137429948682573813, guid: d0f44aef0f05505408e217a5818fd154, type: 3}
   maxHealth: 40
   FireRate: 0.25
+  normalInaccuracy: 2.25
   AttackDuration: 0.45
   Attack:
     serializedVersion: 2
@@ -6743,6 +6801,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   invulnerabilityTime: 0.75
   regenTimerRate: 2
+  debuffTimerThrottle: 2
+  damageFromHazards: 7.5
   dashTimeLength: 0.25
   dashCooldown: 0.25
   dashSpeed: 22.5

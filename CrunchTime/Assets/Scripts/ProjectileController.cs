@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    [SerializeField] float speed = 7;
-    // Update is called once per frame
+    [SerializeField] float speed = 14;
 
+    private SoundManager soundSystem;
     Vector3 mousePosition;
     float angle;
     // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
@@ -17,7 +17,10 @@ public class ProjectileController : MonoBehaviour
 
     void Start()
     {
-        
+        // To prevent linking to an incorrect sound system (remember that they survive scene transitions),
+        // objects link to the first sound system initialized on the creation of the project.
+        soundSystem = SoundManager.instance;
+
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Vector2 direction = mousePosition - transform.position;
@@ -35,6 +38,7 @@ public class ProjectileController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Destroy(gameObject);
+        soundSystem.PlaySoundEffect("WallHit");
     }
 
     // This collision script allows enemies to behit by projectiles
