@@ -6,30 +6,79 @@ using UnityEngine.Tilemaps;
 
 public class DoorController : MonoBehaviour
 {
-    [SerializeField]
-    public Tilemap doorBlock;
 
+    [SerializeField]
+    public GameObject globalStateGO; 
+    private GlobalGameState globalGameState;
+
+    [SerializeField]
+    public Tilemap tileMap;
+
+    [SerializeField]
+    public int doorLevel;
+
+    [SerializeField]
+    public bool destroy = false;
+
+    public int numEnemies;
+
+     
     //create a list of boolean for each level
     //public Bool NewLevelUnlocked;
 
+    public List<Vector3> availablePlaces;
 
     // Start is called before the first frame update
     void Start()
-    {
-        doorBlock = GetComponent<Tilemap>();
+    {  
+        globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+
+
+        tileMap = transform.GetComponentInParent<Tilemap>();
+        availablePlaces = new List<Vector3>();
+ 
+        // TODO : FIND THE CITATION FOR THIS DO NOT FORGET 
+        // if the link is missing, remind amaan to find the resource where he fount this from
+        for (int n = tileMap.cellBounds.xMin; n < tileMap.cellBounds.xMax; n++)
+        {
+            for (int p = tileMap.cellBounds.yMin; p < tileMap.cellBounds.yMax; p++)
+            {
+                Vector3Int localPlace = (new Vector3Int(n, p, (int)tileMap.transform.position.y));
+                Vector3 place = tileMap.CellToWorld(localPlace);
+                if (tileMap.HasTile(localPlace))
+                {
+                    //Tile at "place"
+                    availablePlaces.Add(place);
+                }
+                else
+                {
+                    //No tile at "place"
+                }
+            }
+        }
+
     }
+
     //TODO : We need to cite this 
     //  Used this function and idea from https://youtu.be/QRp4V1JTZnM
-    private void OnCollisionEnter2D(Collision2D collision) {
-        if(collision.gameObject.tag == "Projectile"){
-             Debug.Log("INsideeee");
-            Vector3 positionCollided = Vector3.zero;
-            foreach(ContactPoint2D hit in collision.contacts)
+
+    void Update()
+    {
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {       
+        if(collision.gameObject.tag == "Player"){   
+            if(globalGameState.getNumEnemies() <= 0 )
             {
-                positionCollided.x = hit.point.x - 0.01f *hit.normal.x;
-                positionCollided.y = hit.point.y - 0.01f *hit.normal.y;
-                doorBlock.SetTile(doorBlock.WorldToCell(positionCollided),null);
+                foreach (var pos in availablePlaces)
+                {   
+                    tileMap.SetTile(Vector3Int.FloorToInt(pos), null);
+                }
+                Debug.Log("opening doors");
             }
+
+
         }
     }
 
@@ -39,3 +88,4 @@ public class DoorController : MonoBehaviour
         
     // }
 }
+
