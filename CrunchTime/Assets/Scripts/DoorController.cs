@@ -23,12 +23,14 @@ public class DoorController : MonoBehaviour
     private GameObject gameManager;
 
     private EnemyTracker  enemyTracker;
-
-     
+    private LevelManager levelManager;
+    private int curLvl; 
+    
     //create a list of boolean for each level
     //public Bool NewLevelUnlocked;
 
     public List<Vector3> availablePlaces;
+    private bool levelLock = false;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +38,8 @@ public class DoorController : MonoBehaviour
 
         gameManager = GameObject.Find("GameManager");
         enemyTracker = gameManager.GetComponent<EnemyTracker>();
- 
+        levelManager = gameManager.GetComponent<LevelManager>();
+
         // TODO : FIND THE CITATION FOR THIS DO NOT FORGET 
         // https://forum.unity.com/threads/tilemap-tile-positions-assistance.485867/
         // by username: DDaddySupreme https://forum.unity.com/members/ddaddysupreme.1403037/
@@ -70,28 +73,46 @@ public class DoorController : MonoBehaviour
 
     void Update()
     {
-
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision) {    
-
-        //Debug.Log(globalGameState.getNumEnemies());   
-        if(collision.gameObject.tag == "Player"){  
-
-           // GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
-
-            if(enemyTracker.getNumEnemies() <= 0 )
+        if (!levelLock)
+        {
+           
+            if (levelManager.getCurLevel() == doorLevel)
             {
                 foreach (var pos in availablePlaces)
                 {   
                     tileMap.SetTile(Vector3Int.FloorToInt(pos), null);
                 }
-                Debug.Log("opening doors");
+                Debug.Log("opening doors "+doorLevel );
+                levelLock = true;
             }
-
-
         }
+
     }
+
+    // private void OnCollisionEnter2D(Collision2D collision) {    
+
+    //     //Debug.Log(globalGameState.getNumEnemies());   
+    //     if(collision.gameObject.tag == "Player"){  
+
+    //        // GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+
+    //         if(enemyTracker.getNumEnemies() <= 0 )
+    //         {
+    //             foreach (var pos in availablePlaces)
+    //             {   
+    //                 tileMap.SetTile(Vector3Int.FloorToInt(pos), null);
+    //             }
+    //             Debug.Log("opening doors");
+
+    //             //increment level here 
+    //             levelManager.incrementLevel();
+
+    //         }
+            
+    //     }
+
+
+    // }
 
     // // Update is called once per frame
     // void Update()
