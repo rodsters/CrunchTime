@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame.
     void Update()
     {
-        Debug.Log( (int)(1f / Time.unscaledDeltaTime) );
+       // Debug.Log( (int)(1f / Time.unscaledDeltaTime) );
         // Decrement all timers in real timer every Update() frame (like regneration, invulnerability, and movement stage timers).
         DecrementTimers();
 

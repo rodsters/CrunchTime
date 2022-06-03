@@ -630,6 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75cb3fe315e3f7544b5596569b7d6c5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalStateGO: {fileID: 7910743602101218657, guid: be96eb0f449df449cb26847b8e111eef, type: 3}
   speed: 3.5
   maxHealth: 15
   damage: 6

@@ -5,6 +5,11 @@ using Pathfinding;
 
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField]
+    public GameObject globalStateGO; 
+    private GlobalGameState globalGameState;
+
+
     private GameObject player;
     private Transform target;
 
@@ -61,6 +66,8 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+
         player = GameObject.Find("RainbowMan");
         target = player.transform;
         this.rigidbody2d = GetComponent<Rigidbody2D>();
@@ -250,6 +257,9 @@ public class EnemyController : MonoBehaviour
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
             AddTime(timeAdded);
+            globalGameState.DecrementEnemies();
+            Debug.Log("decrement enemies : "+ globalGameState.getNumEnemies());
+
         }
     }    
     
