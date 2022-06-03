@@ -365,20 +365,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Instructions
+  m_text: '
 
     ------------------------------------
 
-    You have 10
-    minutes to explore the ruins and buy upgrades.
+    You have 10 minutes to
+    explore the ruins and buy upgrades.
 
-    Time is your currency, use
-    it wisely!
+    Time is your currency, use it wisely!
 
-    Upon hitting 0 on the timer, the game will increase in difficulty.
+    Upon
+    hitting 0 on the timer, the game will increase in difficulty.
 
-    The
-    player will die upon reaching -3 minutes on the timer
+    The player
+    will die upon reaching -3 minutes on the timer
 
 
     Controls
