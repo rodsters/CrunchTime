@@ -819,9 +819,15 @@ public class PlayerController : MonoBehaviour
     {
         return maxHealth;
     }
-    public float GetDashTimer()
+
+    public float GetDashCooldown()
     {
-        return DashTimer;
+        return dashCooldown;
+    }
+
+    public bool GetIsDashing()
+    {
+        return isDashing;
     }
 
 }
