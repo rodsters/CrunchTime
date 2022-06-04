@@ -12,6 +12,7 @@ TagManager:
   - Wall
   - Hazard
   - Music
+  - GameManager
   layers:
   - Default
   - TransparentFX

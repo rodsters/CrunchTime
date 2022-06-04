@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlobalGameState : MonoBehaviour
+public class EnemyTracker : MonoBehaviour
 {
-    private int numEnemies; 
+    private int numEnemies = 0; 
 
     // // Start is called before the first frame update
-    void Start()
-    {
-        numEnemies = 0;
-    }
+    // void Start()
+    // {
+    //     numEnemies = 0;
+    // }
 
     public void incrementEnemies()
     {
