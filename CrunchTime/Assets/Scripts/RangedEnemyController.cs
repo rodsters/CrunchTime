@@ -70,6 +70,9 @@ public class RangedEnemyController : MonoBehaviour
 
     private GameObject gameManager;
     private Timer timer;
+
+    private EnemyTracker  enemyTracker;
+    
     [SerializeField]
     private float timeAdded = 15.0f;
 
@@ -83,6 +86,8 @@ public class RangedEnemyController : MonoBehaviour
         this.seeker = GetComponent<Seeker>();
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
+        enemyTracker = gameManager.GetComponent<EnemyTracker>();
+
         sprite = this.transform.Find("EnemyAnimator").gameObject.GetComponent<SpriteRenderer>();
         this.GetComponent<SpriteRenderer>().enabled = false;
 
@@ -330,6 +335,9 @@ public class RangedEnemyController : MonoBehaviour
             AddTime(timeAdded);
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
+
+            enemyTracker.DecrementEnemies();
+            Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
         }
     }
 

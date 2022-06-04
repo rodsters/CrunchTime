@@ -7,9 +7,8 @@ using UnityEngine.Tilemaps;
 public class DoorController : MonoBehaviour
 {
 
-    [SerializeField]
-    public GameObject globalStateGO; 
-    private GlobalGameState globalGameState;
+    //[SerializeField]
+    //public GameObject globalStateGO; 
 
     [SerializeField]
     public Tilemap tileMap;
@@ -20,25 +19,33 @@ public class DoorController : MonoBehaviour
     [SerializeField]
     public bool destroy = false;
 
-    public int numEnemies;
 
-     
+    private GameObject gameManager;
+
+    private EnemyTracker  enemyTracker;
+    private LevelManager levelManager;
+    private int curLvl; 
+    
     //create a list of boolean for each level
     //public Bool NewLevelUnlocked;
 
     public List<Vector3> availablePlaces;
+    private bool levelLock = false;
 
     // Start is called before the first frame update
     void Start()
     {  
-        globalGameState = globalStateGO.GetComponent<GlobalGameState>();
 
+        gameManager = GameObject.Find("GameManager");
+        enemyTracker = gameManager.GetComponent<EnemyTracker>();
+        levelManager = gameManager.GetComponent<LevelManager>();
 
+        // TODO : FIND THE CITATION FOR THIS DO NOT FORGET 
+        // https://forum.unity.com/threads/tilemap-tile-positions-assistance.485867/
+        // by username: DDaddySupreme https://forum.unity.com/members/ddaddysupreme.1403037/
         tileMap = transform.GetComponentInParent<Tilemap>();
         availablePlaces = new List<Vector3>();
- 
-        // TODO : FIND THE CITATION FOR THIS DO NOT FORGET 
-        // if the link is missing, remind amaan to find the resource where he fount this from
+
         for (int n = tileMap.cellBounds.xMin; n < tileMap.cellBounds.xMax; n++)
         {
             for (int p = tileMap.cellBounds.yMin; p < tileMap.cellBounds.yMax; p++)
@@ -57,6 +64,8 @@ public class DoorController : MonoBehaviour
             }
         }
 
+
+
     }
 
     //TODO : We need to cite this 
@@ -64,23 +73,46 @@ public class DoorController : MonoBehaviour
 
     void Update()
     {
-
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision) {       
-        if(collision.gameObject.tag == "Player"){   
-            if(globalGameState.getNumEnemies() <= 0 )
+        if (!levelLock)
+        {
+           
+            if (levelManager.getCurLevel() == doorLevel)
             {
                 foreach (var pos in availablePlaces)
-                {   
+                {                  
                     tileMap.SetTile(Vector3Int.FloorToInt(pos), null);
                 }
-                Debug.Log("opening doors");
+                Debug.Log("opening doors "+doorLevel );
+                levelLock = true;
             }
-
-
         }
+
     }
+
+    // private void OnCollisionEnter2D(Collision2D collision) {    
+
+    //     //Debug.Log(globalGameState.getNumEnemies());   
+    //     if(collision.gameObject.tag == "Player"){  
+
+    //        // GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
+
+    //         if(enemyTracker.getNumEnemies() <= 0 )
+    //         {
+    //             foreach (var pos in availablePlaces)
+    //             {   
+    //                 tileMap.SetTile(Vector3Int.FloorToInt(pos), null);
+    //             }
+    //             Debug.Log("opening doors");
+
+    //             //increment level here 
+    //             levelManager.incrementLevel();
+
+    //         }
+            
+    //     }
+
+
+    // }
 
     // // Update is called once per frame
     // void Update()
