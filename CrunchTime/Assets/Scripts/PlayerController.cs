@@ -124,13 +124,17 @@ public class PlayerController : MonoBehaviour
 
     private SoundManager soundSystem;
     private bool playingNegativeTimeMusic;
-
+    
+    // Animation variables; Harrison
+    [SerializeField] private Animator animator;
+    
     // Start is called before the first frame update.
     void Start()
     {
         // Easily access components with variables.
         rigidbody2d = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         CurrentPhaseVertical = Phase.None;
         CurrentPhaseHorizontal = Phase.None;
         trail = GetComponent<TrailRenderer>();
@@ -177,7 +181,10 @@ public class PlayerController : MonoBehaviour
         {
             soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
-            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+            // Instantiates projectile where weapon is.
+            Vector2 direction = mousePosition - transform.position;
+            Vector2 location = direction.normalized;
+            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
         }
         // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
         // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
@@ -185,10 +192,19 @@ public class PlayerController : MonoBehaviour
         {
             soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
-            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z), transform.rotation);
+            Vector2 direction = mousePosition - transform.position;
+            Vector2 location = direction.normalized;
+            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
         }
-
-
+        
+        if ( (horizontal != 0.0f) || (vertical != 0.0f) )
+        {
+            animator.SetBool("Moving", true);
+        }
+        else
+        {
+            animator.SetBool("Moving", false);
+        }
     }
 
     // Fixed update is used for better compatibility and physics. 
@@ -214,7 +230,10 @@ public class PlayerController : MonoBehaviour
             DashTimer = dashTimeLength;
             // The player should be invulnerable during dashes to dodge projectiles or enemy attacks.
             InvulnerabilityTimer = dashTimeLength;
-
+            
+            // Dash Animation Effect.
+            StartCoroutine(Faded());
+            
             // We have to get a special angle for wdetermining where Rainbowman dashes.
             dashAngle = Vector2.SignedAngle(Vector2.right, direction);
 
@@ -695,6 +714,46 @@ public class PlayerController : MonoBehaviour
         // are able to deal variable damage to the player. Melee/Ranged enmies also do this.
     }
 
+    // Animation functions; Harrison
+    // Flashes when hurt.
+    IEnumerator Pulse()
+    {
+        while (InvulnerabilityTimer > 0.0f)
+        {
+            Color c = sprite.color;
+            if (c.a == 0.5f)
+            {
+                c.a = 1.0f;
+            } 
+            else
+            {
+                c.a = 0.5f;
+            }
+            sprite.color = c;
+            yield return new WaitForSeconds(.1f);
+        }
+        Color b = sprite.color;
+        b.a = 1.0f;
+        sprite.color = b;
+        yield break;
+    }
+    
+    // Faded when invulnerable.
+    IEnumerator Faded()
+    {
+        Color c = sprite.color;
+        c.a = 0.5f;
+        sprite.color = c;
+        while (InvulnerabilityTimer > 0.0f)
+        {
+            yield return new WaitForSeconds(dashTimeLength);
+        }
+        Color b = sprite.color;
+        b.a = 1.0f;
+        sprite.color = b;
+        yield break;
+    }
+    
     // Beginning of public interface functions:
 
     // This increases (with a positive argument) or decreases (with a negative argument) the player's current health.
@@ -715,6 +774,8 @@ public class PlayerController : MonoBehaviour
                 InvulnerabilityTimer = invulnerabilityTime;
                 Debug.Log("Took Damage: " + hitPointsToAdd);
                 soundSystem.PlaySoundEffect("PlayerHit");
+                animator.SetTrigger("Hurt");
+                StartCoroutine(Pulse());
             }
             else if (currentHealth > maxHealth)
             {
