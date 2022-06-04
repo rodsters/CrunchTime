@@ -28,7 +28,7 @@ public class DashCooldown : MonoBehaviour
 
     void DashedCheck()
     {
-        // access the dashCooldown and current dash timer from player controller.
+        // access the dashCooldown and whether the player is dashing from player controller.
         dashCooldown = playerController.GetDashCooldown();
         isDashing = playerController.GetIsDashing();
         // Check if player has dashed.
