@@ -716,7 +716,7 @@ public class PlayerController : MonoBehaviour
 
     // Animation functions; Harrison
     // Flashes when hurt.
-    IEnumerator Pulse()
+    IEnumerator Flash()
     {
         while (InvulnerabilityTimer > 0.0f)
         {
@@ -775,7 +775,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Took Damage: " + hitPointsToAdd);
                 soundSystem.PlaySoundEffect("PlayerHit");
                 animator.SetTrigger("Hurt");
-                StartCoroutine(Pulse());
+                StartCoroutine(Flash());
             }
             else if (currentHealth > maxHealth)
             {
