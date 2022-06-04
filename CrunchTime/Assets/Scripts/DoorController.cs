@@ -79,7 +79,7 @@ public class DoorController : MonoBehaviour
             if (levelManager.getCurLevel() == doorLevel)
             {
                 foreach (var pos in availablePlaces)
-                {   
+                {                  
                     tileMap.SetTile(Vector3Int.FloorToInt(pos), null);
                 }
                 Debug.Log("opening doors "+doorLevel );
