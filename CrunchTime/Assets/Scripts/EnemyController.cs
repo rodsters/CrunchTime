@@ -266,9 +266,6 @@ public class EnemyController : MonoBehaviour
             enemyTracker.DecrementEnemies();
             Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
 
-            //GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
-           // globalGameState.DecrementEnemies();
-
         }
     }    
     
