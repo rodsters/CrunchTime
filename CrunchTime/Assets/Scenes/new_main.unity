@@ -1589,7 +1589,7 @@ GameObject:
   - component: {fileID: 517733015}
   - component: {fileID: 517733014}
   m_Layer: 3
-  m_Name: RaindbowGun
+  m_Name: RainbowGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1904,6 +1904,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+--- !u!1 &657187227 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 776188096}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &667603486
 GameObject:
   m_ObjectHideFlags: 0
@@ -3978,6 +3983,11 @@ Transform:
   m_Father: {fileID: 1227789723}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1411252829 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 607257572}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1432629807
 GameObject:
   m_ObjectHideFlags: 0
@@ -4801,7 +4811,6 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 9104952073214702525, guid: 248ecc1decd71bb4ea4abee47b294199, type: 3}
   maxHealth: 10000
   FireRate: 0.01
-  normalInaccuracy: 2.25
   AttackDuration: 0.45
   Attack:
     serializedVersion: 2
@@ -87860,6 +87869,7 @@ GameObject:
   - component: {fileID: 1729146516}
   - component: {fileID: 1729146515}
   - component: {fileID: 1729146514}
+  - component: {fileID: 1729146518}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -87919,6 +87929,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1729146518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729146513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f77b9c7ca35ba889971d55cd5ef5f50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMobile: 1
+  moveJoystick: {fileID: 1411252829}
+  shootJoystick: {fileID: 657187227}
+  dashButton: {fileID: 430293451}
 --- !u!1 &1751940013
 GameObject:
   m_ObjectHideFlags: 0

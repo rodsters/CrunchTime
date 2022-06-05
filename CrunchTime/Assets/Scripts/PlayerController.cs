@@ -128,6 +128,10 @@ public class PlayerController : MonoBehaviour
     // Animator
     [SerializeField] private Animator animator;
     
+    // Mobile Variables
+    private MobileManager mobileManager;
+    private bool mobile;
+    
     // Start is called before the first frame update.
     void Start()
     {
@@ -140,6 +144,8 @@ public class PlayerController : MonoBehaviour
         trail = GetComponent<TrailRenderer>();
         gameManager = GameObject.Find("GameManager");
         timer = gameManager.GetComponent<Timer>();
+        mobileManager = gameManager.GetComponent<MobileManager>();
+        mobile = mobileManager.getMobile();
         // Note the .instance, The first SoundManager created always puts itself in this static variable as the main music player.
         soundSystem = SoundManager.instance;
         soundSystem.PlayMusicTrack("CrunchTime");
@@ -181,22 +187,35 @@ public class PlayerController : MonoBehaviour
             soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
             // Instantiates projectile where weapon is.
-            Vector2 direction = mousePosition - transform.position;
-            Vector2 location = direction.normalized;
+            Vector2 direction;
+            if (mobile)
+            {
+                direction = mobileManager.getShoot();
+            }
+            else
+            {
+                direction = mousePosition - transform.position;
+            }
             distanceMouseIs = direction.magnitude;
-            // This is used to set the spawnpoint for close porjectiles.
-            Vector3 Direction3D = new Vector3(direction.x * 0.9f, direction.y * 0.9f, 0);
+            Vector2 location = direction.normalized;
 
             if (distanceMouseIs > 1.005)
             {
-                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
+                ProjectileController projectile = 
+                    Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, 
+                    gameObject.transform.position.y + location.y, 
+                    gameObject.transform.position.z), transform.rotation);
+                projectile.direction = direction;
             }
             else
             {
                 // This is a quick fix the bug where the player shoots themself (its funny but its a problem when enemies get close)
-                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
+                // This is used to set the spawnpoint for close porjectiles.
+                Vector3 Direction3D = new Vector3(direction.x * 0.9f, direction.y * 0.9f, 0);
+                ProjectileController projectile = Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
                     gameObject.transform.position.y,
                     gameObject.transform.position.z) + Direction3D, transform.rotation);
+                projectile.direction = direction;
             }
         }
         // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
@@ -205,22 +224,35 @@ public class PlayerController : MonoBehaviour
         {
             soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
-            Vector2 direction = mousePosition - transform.position;
-            Vector2 location = direction.normalized;
+            Vector2 direction;
+            if (mobile)
+            {
+                direction = mobileManager.getShoot();
+            }
+            else
+            {
+                direction = mousePosition - transform.position;
+            }
             distanceMouseIs = direction.magnitude;
-            // This is used to set the spawnpoint for close porjectiles.
-            Vector3 Direction3D = new Vector3(direction.x * 0.9f, direction.y * 0.9f, 0);
+            Vector2 location = direction.normalized;
 
             if (distanceMouseIs > 1.005)
             {
-                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
+                ProjectileController projectile = 
+                    Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, 
+                    gameObject.transform.position.y + location.y,
+                    gameObject.transform.position.z), transform.rotation);
+                projectile.direction = direction;
             }
             else
             {
                 // This is a quick fix the bug where the player shoots themself (its funny but its a problem when enemies get close)
-                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
+                // This is used to set the spawnpoint for close porjectiles.
+                Vector3 Direction3D = new Vector3(direction.x * 0.9f, direction.y * 0.9f, 0);
+                ProjectileController projectile = Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
                     gameObject.transform.position.y,
                     gameObject.transform.position.z) + Direction3D, transform.rotation);
+                    projectile.direction = direction;
             }
             
         }
