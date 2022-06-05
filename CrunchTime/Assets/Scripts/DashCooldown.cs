@@ -16,7 +16,7 @@ public class DashCooldown : MonoBehaviour
     // It is hidden initially as the ability is not on cooldown yet.
     void Start()
     {
-        dashImage.fillAmount = 0;
+        dashImage.fillAmount = 1;
         playerController = FindObjectOfType<PlayerController>();
     }
 
@@ -32,19 +32,19 @@ public class DashCooldown : MonoBehaviour
         dashCooldown = playerController.GetDashCooldown();
         isDashing = playerController.GetIsDashing();
         // Check if player has dashed.
-        if (isDashing == true)
+        if (isDashing == true && onCooldown == false)
         {
             // If they have, make the on cd icon appear.
             onCooldown = true;
-            dashImage.fillAmount = 1;
+            dashImage.fillAmount = 0.0f;
         }
         // While the dash is on cooldown, take away the darkened icon's fill, leaving only the normal icon in its place.
         if (onCooldown)
         {
-            dashImage.fillAmount -= 1/(3*dashCooldown)  * Time.deltaTime;
-            if(dashImage.fillAmount <= 0)
+            dashImage.fillAmount += 1/(3*dashCooldown)  * Time.deltaTime;
+            if(dashImage.fillAmount >= 1)
             {
-                dashImage.fillAmount = 0;
+                dashImage.fillAmount = 1;
                 onCooldown = false;
             }
         }
