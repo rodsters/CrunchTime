@@ -7,7 +7,7 @@ public class CutsceneManager : MonoBehaviour
 {
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             SceneManager.LoadScene("Main Scene");
         }
