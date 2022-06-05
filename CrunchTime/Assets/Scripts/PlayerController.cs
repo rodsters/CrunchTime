@@ -907,4 +907,14 @@ public class PlayerController : MonoBehaviour
         return isDashing;
     }
 
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
+    public float GetDamage()
+    {
+        return damage;
+    }
+
 }

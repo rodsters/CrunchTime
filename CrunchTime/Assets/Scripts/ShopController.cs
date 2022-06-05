@@ -8,6 +8,7 @@ public class ShopController : MonoBehaviour
 {
     public GameObject Panel;
     public Timer timer;
+    PlayerController playerController;
     // The back button toggles the panel visibility, the same way the open menu script handles it.
     public void CloseShop()
     {
@@ -22,17 +23,23 @@ public class ShopController : MonoBehaviour
     {
         // Deselects clicked button so that it is no longer selected.
         EventSystem.current.SetSelectedGameObject(null);
+        playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
         currentValue -= 300.0f;
         timer.setTime(currentValue);
+        playerController.ChangeDamage(2.0f);
     }
 
     public void MovespeedUpgrade()
     {
         EventSystem.current.SetSelectedGameObject(null);
+        playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
         currentValue -= 150.0f;
         timer.setTime(currentValue);
+        var newspeed = playerController.GetSpeed();
+        newspeed *= 2;
+        playerController.SetSpeed(newspeed);
     }
 
     public void upgradeThree()
