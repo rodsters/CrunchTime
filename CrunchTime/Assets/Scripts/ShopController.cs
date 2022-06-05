@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class ShopController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class ShopController : MonoBehaviour
     // The upgrades access the timer's current time, decrease it by the amount the upgrade costs, then set the timer to the new value.
     public void DamageUpgrade()
     {
+        // Deselects clicked button so that it is no longer selected.
+        EventSystem.current.SetSelectedGameObject(null);
         var currentValue = timer.returnTime();
         currentValue -= 300.0f;
         timer.setTime(currentValue);
@@ -26,6 +29,7 @@ public class ShopController : MonoBehaviour
 
     public void MovespeedUpgrade()
     {
+        EventSystem.current.SetSelectedGameObject(null);
         var currentValue = timer.returnTime();
         currentValue -= 150.0f;
         timer.setTime(currentValue);
@@ -33,12 +37,12 @@ public class ShopController : MonoBehaviour
 
     public void upgradeThree()
     {
-
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void upgradeFour()
     {
-        
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }
 
