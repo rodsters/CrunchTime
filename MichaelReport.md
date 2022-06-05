@@ -1,28 +1,29 @@
 ## User Interface - Michael Bai - github: Mbai2000
 ### Menus
 Several menus were implemented for our game. All menus are contained within their own scenes, with the exception of the Pause Menu, which is able to pause any gameplay(non-menu) scene. Each menu scene is loaded through Unity's Scene Manager.
-**Start/Main Menu**
+
+#### Start/Main Menu
 
 The start menu has three buttons: [Start](https://github.com/rodsters/CrunchTime/blob/dacf0b907f6cb09a92b36b1f767469e3d1e9c2cf/CrunchTime/Assets/Scripts/MainMenu.cs#L9), [How To Play](https://github.com/rodsters/CrunchTime/blob/dacf0b907f6cb09a92b36b1f767469e3d1e9c2cf/CrunchTime/Assets/Scripts/MainMenu.cs#L20), and [Quit](https://github.com/rodsters/CrunchTime/blob/dacf0b907f6cb09a92b36b1f767469e3d1e9c2cf/CrunchTime/Assets/Scripts/MainMenu.cs#L15). The Start and How To Play buttons use Unity's scene manager to load their respective scenes. The Start menu loads the scene containing the Introductory Cutscene, while the How To Play button loads the scene containing the instructions. The Quit button exits the application. 
  
-**Controls/How To Play Menu** 
+#### Controls/How To Play Menu 
 
 This menu features only two elements, a [BACK](https://github.com/rodsters/CrunchTime/blob/dacf0b907f6cb09a92b36b1f767469e3d1e9c2cf/CrunchTime/Assets/Scripts/InstructionMenu.cs#L8) button, and a text element. The text element provides a very brief description of the game and how it is played, as well as the controls. The [BACK](https://github.com/rodsters/CrunchTime/blob/dacf0b907f6cb09a92b36b1f767469e3d1e9c2cf/CrunchTime/Assets/Scripts/InstructionMenu.cs#L8) button returns the player to the previous screen (Start/Main Menu).
 
-**Game Over** 
+#### Game Over
 
 This menu is loaded upon the player reaching one of the game over conditions. It is very similar to the Start Menu, featuring three buttons; [Restart](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L10), [Quit](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L19), and [Credits](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L26). The Restart button returns the player to the Start/Main Menu, Quit exits the application, and Credits loads the scene containing the Credits menu. 
 
-**Credits Menu**
+#### Credits Menu
 
 This menu contains three elements, a text element, and two buttons. The [Restart](https://github.com/rodsters/CrunchTime/blob/0450fd3b6b2aedde3f93ec77417aaf5ad466f61a/CrunchTime/Assets/Scripts/CreditsMenu.cs#L10) and [Quit](https://github.com/rodsters/CrunchTime/blob/0450fd3b6b2aedde3f93ec77417aaf5ad466f61a/CrunchTime/Assets/Scripts/CreditsMenu.cs#L19) buttons function exactly the same as the Restart and Quit from the Game Over menu. The text element contains the names of all the group members and their respective roles. 
 
-**References for all menus above**
+#### References for all menus above
 
 The initial menu (Start/Main Menu), was created/designed with video reference. All other menus were adapted from the original menu.
 [Menu reference](https://youtu.be/zc8ac_qUXQY)
 
-**Pause Menu**
+#### Pause Menu
 
 Upon pressing the Escape (ESC) key in any gameplay scene, the pause menu will appear. The pause menu is a transparent panel that appears on top of the current scene when ESC is pressed, with two buttons, Resume and Main Menu. Hitting ESC will also close the pause menu. 
 
@@ -36,7 +37,7 @@ Two video references were used when creating the Pause menu:
 [Pause Reference 1](https://youtu.be/JivuXdrIHK0)
 [Pause Reference 2](https://youtu.be/tfzwyNS1LUY)
 
-**Shop**
+#### Shop
 
 The shop is composed of two separate game objects, one that allows the player to open the shop, and one that is the shop UI. The first object is a transparent button overlaid on top of the shop sprite. When the shop sprite is clicked, the shop UI panel will be set to active. 
 
@@ -49,7 +50,8 @@ Two videos were also referenced when creating the shop UI.
 ### Other UI Elements
 #### HUD
 There were multiple non-menu UI elements we needed. Unlike the various menus which were contained within their own scenes, these UI elements are present in the gameplay scenes, displayed on the player's HUD.
-**Timer**
+
+#### Timer
 
 A core mechanic of our game is the usage of time. As such, a timer needed to be implemented for the player to be able to track their remaining time. The timer is a [text object](https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/Timer.cs#L19) that will continually decrease from the initial [total time](https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/Timer.cs#L12) every second. The player's [current time](https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/Timer.cs#L11) remaining is tracked in a variable. This text is displayed in the format [MM:SS](https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/Timer.cs#L49). Upon reaching a time of 0, the game will increase in difficulty. Upon reaching a time of -3 minutes, the game will end. 
 
@@ -58,7 +60,7 @@ Time also functions as a currency in this game. As such, [get](https://github.co
 A video was referenced to properly update the text element with the correct time.
 [Timer Text Reference](https://youtu.be/o0j7PdU88a4)
 
-**Health Bar**
+#### Health Bar
 
 The health bar for this game is composed of two separate images. The first is simply the background for the health bar. The [second image](https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/HealthBar.cs#L10https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/HealthBar.cs#L10) is an image of type "filled" that will change its fill amount horizontally based on the player's health. 
 
@@ -69,7 +71,7 @@ The health bar also checks whether or not the player has [died](https://github.c
 A video reference was used for the health bar
 [Health Bar Reference](https://youtu.be/NE5cAlCRgzo)
 
-**Dash Cooldown**
+#### Dash Cooldown
 
 The player is able to dash on a cooldown determined by the length of the dash. As such, a visual element is required to allow the player to know when they are able to dash. The dash icon is similar to the health bar in that it is composed of two images. The first image is the default icon, when the ability is available. The [second image](https://github.com/rodsters/CrunchTime/blob/44a2ee9c9fcf48b233ec80d5e13348767a0c2c1f/CrunchTime/Assets/Scripts/DashCooldown.cs#L8) is a darkened version of the icon of type filled that represents the ability on cooldown. This darkened image is initially set to a fill of 0, completely hiding it. This causes the player to only see the first image.
 
@@ -78,14 +80,14 @@ The dash icon updates by accessing values from the [Player Controller](https://g
 A video was referenced to create the visual effect tracking the dash's cooldown.
 [Dash Cooldown Reference](https://youtu.be/wtrkrsJfz_4)
 
-**Minimap**
+#### Minimap
 
 A minimap was also created to allow the player to better track their position. The minimap is the only UI object without a script attached to it. The minimap is a raw image linked to a camera (seperate from the main camera) through a rendered texture. The minimap camera is attached to the player, keeping the player centered in the minimap while the player moves. As our game is 2D, the minimap camera is set to a negative z position, in order to display the proper image.
 
 A video was referenced to create the minimap.
 [Minimap Reference](https://youtu.be/28JTTXqMvOU)
 
-**Enemy Health Bars**
+#### Enemy Health Bars
 As our game has enemies that need to be defeated, enemy health bars were created to provide a visual indicator for the player that damage is being dealt and show their progress towards defeating each enemy. Unlike the player health bar, the enemy health bars are attached to the enemies themselves so that they will follow the enemies as they move. Additionally, the enemy health bars are slider components, rather than images like the player health bar. However, these sliders function much like the player health bar image.
 
 The enemy health bar controller script only has two functions. Update simply moves the health bar with the enemy's location, at an offset 'y' value so that it appears above the enemy, rather than within. The other function, [SetHealth](), adjusts the slider. An enemy's health bar only appears upon the enemy taking damage. The slider's current value is then updated based on the enemies current health and max health is set based on their max health.
