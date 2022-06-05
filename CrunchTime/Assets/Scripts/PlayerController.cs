@@ -39,13 +39,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float FireRate = 0.3f;
     // This is a timer that is set to fire rate after shooting but decrements by Time.deltaTime every frame.
     private float FireRateTimer = 0.0f;
+    private float distanceMouseIs = 0.0f;
+    private Vector3 Direction3D;
 
     // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
     // Set to public for projectiles to access it, and it has a setter function.
     [SerializeField] static public float inaccuracy = 2.25f;
-    // This is used by setters in the case of negative inaccuracy
-    [SerializeField] private float normalInaccuracy = 2.25f;
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
@@ -160,7 +160,6 @@ public class PlayerController : MonoBehaviour
         RegenTimer = regenTimerRate;
         DashTimer = (-3 * dashCooldown);
         normalSpeed = speed;
-        normalInaccuracy = inaccuracy;
         trail.emitting = false;
         trail.widthMultiplier = 0.75f;
     }
@@ -184,7 +183,21 @@ public class PlayerController : MonoBehaviour
             // Instantiates projectile where weapon is.
             Vector2 direction = mousePosition - transform.position;
             Vector2 location = direction.normalized;
-            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
+            distanceMouseIs = direction.magnitude;
+            // This is used to set the spawnpoint for close porjectiles.
+            Vector3 Direction3D = new Vector3(direction.x * 0.9f, direction.y * 0.9f, 0);
+
+            if (distanceMouseIs > 1.005)
+            {
+                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
+            }
+            else
+            {
+                // This is a quick fix the bug where the player shoots themself (its funny but its a problem when enemies get close)
+                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
+                    gameObject.transform.position.y,
+                    gameObject.transform.position.z) + Direction3D, transform.rotation);
+            }
         }
         // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
         // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
@@ -194,7 +207,22 @@ public class PlayerController : MonoBehaviour
             FireRateTimer = FireRate;
             Vector2 direction = mousePosition - transform.position;
             Vector2 location = direction.normalized;
-            Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
+            distanceMouseIs = direction.magnitude;
+            // This is used to set the spawnpoint for close porjectiles.
+            Vector3 Direction3D = new Vector3(direction.x * 0.9f, direction.y * 0.9f, 0);
+
+            if (distanceMouseIs > 1.005)
+            {
+                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, gameObject.transform.position.y + location.y, gameObject.transform.position.z), transform.rotation);
+            }
+            else
+            {
+                // This is a quick fix the bug where the player shoots themself (its funny but its a problem when enemies get close)
+                Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
+                    gameObject.transform.position.y,
+                    gameObject.transform.position.z) + Direction3D, transform.rotation);
+            }
+            
         }
         
         if ( (horizontal != 0.0f) || (vertical != 0.0f) )
@@ -827,24 +855,12 @@ public class PlayerController : MonoBehaviour
     {
         dashCooldown = newDashCooldown;
     }
-    // Intended for firing upgrades/downgrades, give the player a new angle of inaccuracy when firing.
+    // Intended for firing upgrades/downgrades, multiply the angle of inaccuracy when firing.
     // This is recommended along with a heavy firing speed upgrade to make it a little more interesting.
     // If a multishot upgrade is implemented, this will go along well with it too.
-    public void ChangeInaccuracy(float newInaccuracy)
+    public void ChangeInaccuracy(float newInaccuracyModifier)
     {
-        inaccuracy += newInaccuracy;
-        normalInaccuracy = inaccuracy;
-        if (inaccuracy < 0)
-        {
-            inaccuracy = 0;
-
-        }
-        // If the player dipped to negative inaccuracy, desyncing the normalInaccuracy, yet went back to positive
-        if (inaccuracy != normalInaccuracy && normalInaccuracy > 0)
-        {
-            inaccuracy = normalInaccuracy;
-
-        }
+        inaccuracy *= newInaccuracyModifier;
     }
     // Intended for projectile upgrades/downgrades, multiply current damage by a specific multiplier.
     public void ChangeDamage(float newDamageMultiplier)
