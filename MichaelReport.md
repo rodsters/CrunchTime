@@ -1,5 +1,8 @@
+
 ## User Interface - Michael Bai - github: Mbai2000
+
 ### Menus
+
 Several menus were implemented for our game. All menus are contained within their own scenes, with the exception of the Pause Menu, which is able to pause any gameplay(non-menu) scene. Each menu scene is loaded through Unity's Scene Manager.
 
 #### Start/Main Menu
@@ -48,7 +51,9 @@ Two videos were also referenced when creating the shop UI.
 [Shop UI design](https://youtu.be/EEtOt0Jf7PQ)
 
 ### Other UI Elements
+
 #### HUD
+
 There were multiple non-menu UI elements we needed. Unlike the various menus which were contained within their own scenes, these UI elements are present in the gameplay scenes, displayed on the player's HUD.
 
 #### Timer
@@ -98,7 +103,9 @@ A video was referenced to create the enemy health bars.
 [Enemy Health Bar Reference](https://youtu.be/v1UGTTeQzbo)
 
 ## Narrative Design - Michael Bai - github: Mbai2000
+
 ### Intro Cutscene
+
 Our game features a knight who has been trapped within ancient ruins filled with monsters. He is trying to become as powerful as possible before time runs out, and a curse begins taking hold, which will cause him to be overwhelmed by the monsters. Although our game does not have a deep or complex narrative, we wanted to tie it to the theme of "The Best of Times, the Worst of Times". This took shape in the utilization of time. When the player first begins playing the game, the player has plenty of time to spend on upgrades, and has no negative effects applied to them, representing the "best of times". However, when their time reaches 0, the player will begin receiving de-buffs (the curse taking effect). Additionally, although the player can still technically spend time on upgrades, this will cause the player to receive additional de-buffs. This represents the worst of times. 
 
 In order to setup the scenario, a short intro cutscene was created that would play upon the player clicking Start on the Start/Main Menu. The cutscene can be skipped upon pressing ESC. This cutscene shows the player character (a knight), as well as an assortment of the enemies found within the game. The knight runs through a hall at a medium pace, as monsters begin to appear behind him. The knight turns around and notices the monsters, before running away at a faster speed. The monsters chase the knight off-screen, at which point the game begins. 
