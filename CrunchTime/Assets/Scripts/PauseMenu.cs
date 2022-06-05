@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+
 // Pause menu made referencing https://www.youtube.com/watch?v=JivuXdrIHK0&t=1s.
 // Also referenced https://www.youtube.com/watch?v=tfzwyNS1LUY.
 public class PauseMenu : MonoBehaviour
@@ -40,6 +42,9 @@ public class PauseMenu : MonoBehaviour
     // Function to close pause menu.
     public void Resume()
     {
+        // Deselects clicked button so that it is no longer selected.
+        EventSystem.current.SetSelectedGameObject(null);
+        
         pauseMenu.SetActive(false);
         // Reset time scale back to normal.
         Time.timeScale = 1f;
@@ -49,6 +54,7 @@ public class PauseMenu : MonoBehaviour
     // Function for Main Menu button to return back to the main menu.
     public void HomeScreen()
     {
+        EventSystem.current.SetSelectedGameObject(null);
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
     }
