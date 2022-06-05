@@ -19,8 +19,6 @@ public class QuitMenu : MonoBehaviour
     public void QuitGame()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        
-        Debug.Log("QUIT");
         Application.Quit();
     }
 

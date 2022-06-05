@@ -7,7 +7,8 @@ public class ProjectileController : MonoBehaviour
     [SerializeField] float speed = 14;
 
     private SoundManager soundSystem;
-    Vector3 mousePosition;
+    // Direction should be set immediately after instantiation.
+    public Vector2 direction;
     float angle;
     // Not sure whether or not this should be a thing, but it could be fun for upgrades (maybe a minigun one that adds
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
@@ -21,9 +22,6 @@ public class ProjectileController : MonoBehaviour
         // objects link to the first sound system initialized on the creation of the project.
         soundSystem = SoundManager.instance;
 
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        Vector2 direction = mousePosition - transform.position;
         angle = Vector2.SignedAngle(Vector2.right, direction);
         angle += Random.Range(-inaccuracy, inaccuracy);
         transform.eulerAngles = new Vector3(0, 0, angle);

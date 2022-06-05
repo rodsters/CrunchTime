@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class HealthBar : MonoBehaviour
 {
-    // Referenced https://www.youtube.com/watch?v=NE5cAlCRgzohttps://www.youtube.com/watch?v=NE5cAlCRgzo to create HP Bar UI elements
+    // Referenced https://www.youtube.com/watch?v=NE5cAlCRgzo to create HP Bar UI elements
     // and make the UI elements visually update properly.
     private Image HP;
     public float currentHealth;

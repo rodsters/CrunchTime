@@ -242,6 +242,31 @@ public class EnemySpawner : MonoBehaviour
 
                 levelLocks[curLvl-1] = true;  
             }
+            
+        }else if(curLvl == 7)
+        {
+            if(!levelLocks[curLvl-1])
+            {
+                // var tempPosition = new Vector3(80.6f,76.9f,0);
+                // List<Vector3> temp = new List<Vector3>();
+                // temp.Add(tempPosition);
+
+                // var level6 = new List<(int, Vector3)>
+                // {
+                //     (1, new Vector3(81.6f,76.9f,0)),
+                //     (1, new Vector3(81.6f,76.9f,0)),
+                //     (1, new Vector3(81.6f,76.9f,0)),
+                //     (1, new Vector3(81.6f,76.9f,0)),
+                //     (1, new Vector3(81.6f,76.9f,0)),
+                //     (1, new Vector3(81.6f,76.9f,0))
+                // };
+                // SpawnEnemy(level6);
+                GameObject level7Spawn = spawns.transform.GetChild(curLvl-1).gameObject;
+                SpawnEnemy(CreateLocationsAndTypes(level7Spawn));
+
+                levelLocks[curLvl-1] = true;  
+            }
+            
         }
     } 
 

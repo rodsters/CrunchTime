@@ -19,7 +19,6 @@ public class CreditsMenu : MonoBehaviour
     public void QuitGame()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        Debug.Log("QUIT");
         Application.Quit();
     }
 }
