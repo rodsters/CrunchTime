@@ -27,6 +27,10 @@ public class RainbowGunAnimation : MonoBehaviour
         if (mobile)
         {
             direction = manager.getShoot();
+            if (direction == Vector2.zero)
+            {
+                direction = mousePosition - transform.position;
+            }
         }
         else
         {

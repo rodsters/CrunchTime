@@ -191,6 +191,10 @@ public class PlayerController : MonoBehaviour
             if (mobile)
             {
                 direction = mobileManager.getShoot();
+                if (direction == Vector2.zero)
+                {
+                    direction = mousePosition - transform.position;
+                }
             }
             else
             {
@@ -228,6 +232,10 @@ public class PlayerController : MonoBehaviour
             if (mobile)
             {
                 direction = mobileManager.getShoot();
+                if (direction == Vector2.zero)
+                {
+                    direction = mousePosition - transform.position;
+                }
             }
             else
             {
@@ -252,7 +260,7 @@ public class PlayerController : MonoBehaviour
                 ProjectileController projectile = Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x,
                     gameObject.transform.position.y,
                     gameObject.transform.position.z) + Direction3D, transform.rotation);
-                    projectile.direction = direction;
+                projectile.direction = direction;
             }
             
         }
