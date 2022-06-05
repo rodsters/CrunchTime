@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
     private SoundManager soundSystem;
     private bool playingNegativeTimeMusic;
     
-    // Animation variables; Harrison
+    // Animator
     [SerializeField] private Animator animator;
     
     // Start is called before the first frame update.
