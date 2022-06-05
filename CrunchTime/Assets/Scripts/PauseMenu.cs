@@ -56,6 +56,10 @@ public class PauseMenu : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         Time.timeScale = 1f;
+        // Music patch
+        GameObject sound = GameObject.Find("SoundManager");
+        sound.GetComponent<SoundManager>().PlayMusicTrack("Altar");
+        
         SceneManager.LoadScene("Menu");
     }
 }
