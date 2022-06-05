@@ -4018,7 +4018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1572012258
 RectTransform:
   m_ObjectHideFlags: 0
@@ -86649,7 +86649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalTime: 600
-  timerText: {fileID: 949302876}
+  timerText: {fileID: 1064535553}
 --- !u!4 &1729146517
 Transform:
   m_ObjectHideFlags: 0
