@@ -46,8 +46,6 @@ public class PlayerController : MonoBehaviour
     // to inaccuracy but gives a huge fire-rate, or one that sets inaccuracy to be 0).
     // Set to public for projectiles to access it, and it has a setter function.
     [SerializeField] static public float inaccuracy = 2.25f;
-    // This is used by setters in the case of negative inaccuracy
-    [SerializeField] private float normalInaccuracy = 2.25f;
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
@@ -162,7 +160,6 @@ public class PlayerController : MonoBehaviour
         RegenTimer = regenTimerRate;
         DashTimer = (-3 * dashCooldown);
         normalSpeed = speed;
-        normalInaccuracy = inaccuracy;
         trail.emitting = false;
         trail.widthMultiplier = 0.75f;
     }
@@ -858,24 +855,12 @@ public class PlayerController : MonoBehaviour
     {
         dashCooldown = newDashCooldown;
     }
-    // Intended for firing upgrades/downgrades, give the player a new angle of inaccuracy when firing.
+    // Intended for firing upgrades/downgrades, multiply the angle of inaccuracy when firing.
     // This is recommended along with a heavy firing speed upgrade to make it a little more interesting.
     // If a multishot upgrade is implemented, this will go along well with it too.
-    public void ChangeInaccuracy(float newInaccuracy)
+    public void ChangeInaccuracy(float newInaccuracyModifier)
     {
-        inaccuracy += newInaccuracy;
-        normalInaccuracy = inaccuracy;
-        if (inaccuracy < 0)
-        {
-            inaccuracy = 0;
-
-        }
-        // If the player dipped to negative inaccuracy, desyncing the normalInaccuracy, yet went back to positive
-        if (inaccuracy != normalInaccuracy && normalInaccuracy > 0)
-        {
-            inaccuracy = normalInaccuracy;
-
-        }
+        inaccuracy *= newInaccuracyModifier;
     }
     // Intended for projectile upgrades/downgrades, multiply current damage by a specific multiplier.
     public void ChangeDamage(float newDamageMultiplier)
