@@ -1714,9 +1714,9 @@ TextureImporter:
         x: 240
         y: 64
         width: 16
-        height: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1859,11 +1859,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 32
+        y: 48
         width: 16
-        height: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1880,11 +1880,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 112
-        y: 32
+        y: 48
         width: 16
-        height: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1946,19 +1946,19 @@ TextureImporter:
       name: 16x16 dungeon ii wall reconfig v04 spritesheet_74
       rect:
         serializedVersion: 2
-        x: 176
+        x: 96
         y: 32
-        width: 16
-        height: 32
+        width: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.25, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 0}
-        - {x: -8, y: 16}
-        - {x: 8, y: 16}
-        - {x: 8, y: 0}
+      - - {x: -16, y: -8}
+        - {x: -16, y: -8}
+        - {x: -16, y: -8}
+        - {x: -16, y: -8}
       tessellationDetail: 0
       bones: []
       spriteID: 6fb24ed52ae2f4100800000000000000
@@ -2158,9 +2158,9 @@ TextureImporter:
         x: 64
         y: 0
         width: 16
-        height: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2184,7 +2184,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: -16}
+        - {x: -8, y: 0}
+        - {x: 8, y: 0}
+        - {x: 8, y: -16}
       tessellationDetail: 0
       bones: []
       spriteID: 254f28399ae1e7300800000000000000
@@ -2199,13 +2203,17 @@ TextureImporter:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.25, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -16, y: -16}
+        - {x: -16, y: 0}
+        - {x: 16, y: 0}
+        - {x: 16, y: -16}
       tessellationDetail: 0
       bones: []
       spriteID: 8b449f13ae694d740800000000000000
@@ -2218,8 +2226,8 @@ TextureImporter:
       name: 16x16 dungeon ii wall reconfig v04 spritesheet_86
       rect:
         serializedVersion: 2
-        x: 112
-        y: 0
+        x: 144
+        y: 32
         width: 16
         height: 32
       alignment: 9
@@ -2247,7 +2255,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: -16}
+        - {x: -8, y: 0}
+        - {x: 8, y: 0}
+        - {x: 8, y: -16}
       tessellationDetail: 0
       bones: []
       spriteID: 0c9a996bd759355a0800000000000000
@@ -2263,9 +2275,9 @@ TextureImporter:
         x: 144
         y: 0
         width: 16
-        height: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2283,13 +2295,17 @@ TextureImporter:
         serializedVersion: 2
         x: 160
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.25, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -16, y: -16}
+        - {x: -16, y: 0}
+        - {x: -16, y: 0}
+        - {x: -16, y: -16}
       tessellationDetail: 0
       bones: []
       spriteID: a7bfba030d0cbf650800000000000000
@@ -2302,12 +2318,12 @@ TextureImporter:
       name: 16x16 dungeon ii wall reconfig v04 spritesheet_90
       rect:
         serializedVersion: 2
-        x: 176
-        y: 0
+        x: 240
+        y: 80
         width: 16
-        height: 32
+        height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
