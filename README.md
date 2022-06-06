@@ -28,7 +28,7 @@ You should replay any **bold text** with your relevant information. Liberally us
 
 ### Menus
 
-Several menus were implemented for our game. All menus are contained within their own scenes, with the exception of the Pause Menu, which is able to pause any gameplay(non-menu) scene. Each menu scene is loaded through Unity's Scene Manager.
+Several menus were implemented for our game. All menus are contained within their own scenes, with the exception of the Pause Menu and Shop Menu, which are panels that appear within gameplay scenes. Each menu scene is loaded through Unity's Scene Manager.
 
 #### Start/Main Menu
 
@@ -40,7 +40,11 @@ This menu features only two elements, a [BACK](https://github.com/rodsters/Crunc
 
 #### Game Over
 
-This menu is loaded upon the player reaching one of the game over conditions. It is very similar to the Start Menu, featuring three buttons; [Restart](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L10), [Quit](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L19), and [Credits](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L26). The Restart button returns the player to the Start/Main Menu, Quit exits the application, and Credits loads the scene containing the Credits menu. 
+This menu is loaded upon the player reaching one of the game over conditions. It is very similar to the Start Menu, featuring three buttons; [Restart](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L10), [Quit](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L19), and [Credits](https://github.com/rodsters/CrunchTime/blob/22125e986ef727c82f3ffdd6d10fe9c7e6d47193/CrunchTime/Assets/Scripts/QuitMenu.cs#L26). The Restart button returns the player to the Start/Main Menu, Quit exits the application, and Credits loads the scene containing the Credits menu.
+
+#### Victory Menu
+
+This menu is loaded upon the player reaching a victory condition. This menu is identical to the Game Over screen, with the exception of the text element. The text element displays "You Escaped!" to represet victory. All three buttons [Restart](https://github.com/rodsters/CrunchTime/blob/9cb516ddd54eadeb1d52754969635e1b00ca74bd/CrunchTime/Assets/Scripts/VictoryMenu.cs#L10), [Quit](https://github.com/rodsters/CrunchTime/blob/9cb516ddd54eadeb1d52754969635e1b00ca74bd/CrunchTime/Assets/Scripts/VictoryMenu.cs#L19), and [Credits](https://github.com/rodsters/CrunchTime/blob/9cb516ddd54eadeb1d52754969635e1b00ca74bd/CrunchTime/Assets/Scripts/VictoryMenu.cs#L26) function the same. This menu is loaded when the player reaches the end of the ruins, and clicks the exit. 
 
 #### Credits Menu
 
@@ -67,9 +71,9 @@ Two video references were used when creating the Pause menu:
 
 #### Shop
 
-The shop is composed of two separate game objects, one that allows the player to open the shop, and one that is the shop UI. The first object is a transparent button overlaid on top of the shop sprite. When the shop sprite is clicked, the shop UI panel will be set to active. 
+The shop is composed of two separate game objects, one that allows the player to open the shop, and one that is the shop UI. The first object is a transparent button overlaid on top of the shop sprite. When the shop sprite is clicked, the shop UI panel will be set to active. The time scale of the game is set to 0 upon opening the shop. This is to prevent the player from being overrun while shopping.
 
-The shop UI is similar to the pause menu, in that it utilizes a panel with multiple buttons. The [Back]() button hides the shop panel by setting it to false. For each upgrade offered, there is a text element describing the upgrade, as well as a button allowing the purchase of each upgrade, with its associated cost in seconds. These upgrade buttons will decrease the time remaining on the timer by calling a setter function (mentioned below).
+The shop UI is similar to the pause menu, in that it utilizes a panel with multiple buttons. The Back button hides the shop panel by setting it to false. For each upgrade offered, there is a text element describing the upgrade, as well as a button allowing the purchase of each upgrade, with its associated cost in seconds. These upgrade buttons will decrease the time remaining on the timer by calling a setter function (mentioned below).
 
 Two videos were also referenced when creating the shop UI.
 [Button to open Panel](https://youtu.be/LziIlLB2Kt4)
@@ -120,9 +124,9 @@ A video was referenced to create the minimap.
 #### Enemy Health Bars
 As our game has enemies that need to be defeated, enemy health bars were created to provide a visual indicator for the player that damage is being dealt and show their progress towards defeating each enemy. Unlike the player health bar, the enemy health bars are attached to the enemies themselves so that they will follow the enemies as they move. Additionally, the enemy health bars are slider components, rather than images like the player health bar. However, these sliders function much like the player health bar image.
 
-The enemy health bar controller script only has two functions. Update simply moves the health bar with the enemy's location, at an offset 'y' value so that it appears above the enemy, rather than within. The other function, [SetHealth](), adjusts the slider. An enemy's health bar only appears upon the enemy taking damage. The slider's current value is then updated based on the enemies current health and max health is set based on their max health.
+The enemy health bar controller script only has two functions. Update simply moves the health bar with the enemy's location, at an offset 'y' value so that it appears above the enemy, rather than within. The other function, [SetHealth](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyHealthBar.cs#L15), adjusts the slider. An enemy's health bar only appears upon the enemy taking damage. The slider's current value is then updated based on the enemies current health and max health is set based on their max health.
 
-In order to properly set the slider's values, [EnemyController]() needed to be modified. Upon an enemy being created, SetHealth is called within Start of EnemyController with the proper values. When the enemy takes damage, within the ChangeEnemyHealth function, the SetHealth function is again called to update the current health in the health bar to that of the enemy. 
+In order to properly set the slider's values, [EnemyController](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L94) needed to be modified. Upon an enemy being created, SetHealth is called within Start of EnemyController with the proper values. When the enemy takes damage, within the ChangeEnemyHealth function, the SetHealth function is again called to update the current health in the health bar to that of the enemy. 
 
 A video was referenced to create the enemy health bars.
 [Enemy Health Bar Reference](https://youtu.be/v1UGTTeQzbo)
@@ -167,11 +171,12 @@ A video was referenced to create the enemy health bars.
 
 ### Intro Cutscene
 
-Our game features a knight who has been trapped within ancient ruins filled with monsters. He is trying to become as powerful as possible before time runs out, and a curse begins taking hold, which will cause him to be overwhelmed by the monsters. Although our game does not have a deep or complex narrative, we wanted to tie it to the theme of "The Best of Times, the Worst of Times". This took shape in the utilization of time. When the player first begins playing the game, the player has plenty of time to spend on upgrades, and has no negative effects applied to them, representing the "best of times". However, when their time reaches 0, the player will begin receiving de-buffs (the curse taking effect). Additionally, although the player can still technically spend time on upgrades, this will cause the player to receive additional de-buffs. This represents the worst of times. 
+Our game features a knight who has been trapped within ancient ruins filled with monsters. Upon entering he is cursed for disturbing the ruins. He has to fight against time to stronger and escape before the curse begins taking hold, and the monsters overrun him. Although our game does not have a deep or complex narrative, we wanted to tie it to the theme of "The Best of Times, the Worst of Times". This took shape in the utilization of time. When the player first begins playing the game, the player has plenty of time to spend on upgrades, and has no negative effects applied to them, representing the "best of times". However, when their time reaches 0, the player will begin receiving de-buffs, and eventually die if time reaches -3 minutes (the curse taking effect). Additionally, although the player can still technically spend time on upgrades, this will cause the player to receive additional de-buffs and bring them closer to game over. This represents the worst of times. 
 
-In order to setup the scenario, a short intro cutscene was created that would play upon the player clicking Start on the Start/Main Menu. The cutscene can be skipped upon pressing ESC. This cutscene shows the player character (a knight), as well as an assortment of the enemies found within the game. The knight runs through a hall at a medium pace, as monsters begin to appear behind him. The knight turns around and notices the monsters, before running away at a faster speed. The monsters chase the knight off-screen, at which point the game begins. 
+In order to setup the scene somewhat, a short intro cutscene was created that would play upon the player clicking Start on the Start/Main Menu. The cutscene can be skipped upon pressing ESC. This cutscene shows the player character (a knight), as well as an assortment of the enemies found within the game. The knight runs through a hall at a medium pace, as monsters begin to appear behind him. The knight turns around and notices the monsters, before running away at a faster speed. The monsters chase the knight off-screen, at which point the game begins. 
 
-[A video was referenced when creating the opening cutscene](https://youtu.be/Y5RDtN1jM6A)
+[A video was referenced when creating the opening cutscene](https://youtu.be/Y5RDtN1jM6A)## Narrative Design - Michael Bai - github: Mbai2000
+
 
 ## Press Kit and Trailer
 
