@@ -371,7 +371,11 @@ After that, comes the maze level, Where as the player enters, he/she sees what t
 Now comes the crunch time level, where In my mind, we would place a lot of enemies, creating some kind of “stress” for the player, maybe add some speedy enemies that are hard to dodge. 
 
 After that comes an empty room, with the boss fight, we ended up just putting a lot of enemies in this room, but in my mind when i created this empty room I assumed there would be a big boss that we would need to fight off. 
+
 The end result of the map is very similar, we added a shop in the middle of level 3 and 4 and changed the tileset to match the dungeon theme.
+
+![Map2](https://github.com/rodsters/CrunchTime/blob/michael---summary-and-gameplay-explanation/MapImage2.png)
+
 Each door in the map is a separate tileset that shares a script, which allows it to destroy itself when level is incremented. This system is described above in the game logic. 
 
 ## Narrative Design - Michael Bai - github: Mbai2000
