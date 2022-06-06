@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
-    [SerializeField] static public float damage = 3.35f;
+    [SerializeField] static public float damage = 10f;
 
 
     // To avoid counter-strike style bunnyhop shennanigans, decay and sustain are basically ignored and set to normal speed.
@@ -124,14 +124,14 @@ public class PlayerController : MonoBehaviour
 
     private SoundManager soundSystem;
     private bool playingNegativeTimeMusic;
-    
+
     // Animator
     [SerializeField] private Animator animator;
-    
+
     // Mobile Variables
     private MobileManager mobileManager;
     private bool mobile;
-    
+
     // Start is called before the first frame update.
     void Start()
     {
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame.
     void Update()
     {
-       // Debug.Log( (int)(1f / Time.unscaledDeltaTime) );
+        // Debug.Log( (int)(1f / Time.unscaledDeltaTime) );
         // Decrement all timers in real timer every Update() frame (like regneration, invulnerability, and movement stage timers).
         DecrementTimers();
 
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
 
         // This code is for shooting. The player will be able to shoot by holding down either
         // of the two buttons, repeating fire every time the FireRateTimer reaches 0.
-        if ( (Input.GetButton("Jump") || Input.GetButton("Fire1")) && FireRateTimer <= 0 )
+        if ((Input.GetButton("Jump") || Input.GetButton("Fire1")) && FireRateTimer <= 0)
         {
             soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
@@ -205,9 +205,9 @@ public class PlayerController : MonoBehaviour
 
             if (distanceMouseIs > 1.005)
             {
-                ProjectileController projectile = 
-                    Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, 
-                    gameObject.transform.position.y + location.y, 
+                ProjectileController projectile =
+                    Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x,
+                    gameObject.transform.position.y + location.y,
                     gameObject.transform.position.z), transform.rotation);
                 projectile.direction = direction;
             }
@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
         }
         // Make clicking a tiny bit faster (again, unsure if this is what we should do. If it feels weird, delete it).
         // IIRC, this is done by many games so it's super unlikely that the player clicks and feels it didn't register.
-        else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && ( FireRateTimer - (FireRate/2.75f) ) <= 0)
+        else if ((Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire1")) && (FireRateTimer - (FireRate / 2.75f)) <= 0)
         {
             soundSystem.PlaySoundEffect("Shooting");
             FireRateTimer = FireRate;
@@ -246,8 +246,8 @@ public class PlayerController : MonoBehaviour
 
             if (distanceMouseIs > 1.005)
             {
-                ProjectileController projectile = 
-                    Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x, 
+                ProjectileController projectile =
+                    Instantiate(ProjectilePrefab, new Vector3(gameObject.transform.position.x + location.x,
                     gameObject.transform.position.y + location.y,
                     gameObject.transform.position.z), transform.rotation);
                 projectile.direction = direction;
@@ -262,10 +262,10 @@ public class PlayerController : MonoBehaviour
                     gameObject.transform.position.z) + Direction3D, transform.rotation);
                 projectile.direction = direction;
             }
-            
+
         }
-        
-        if ( (horizontal != 0.0f) || (vertical != 0.0f) )
+
+        if ((horizontal != 0.0f) || (vertical != 0.0f))
         {
             animator.SetBool("Moving", true);
         }
@@ -298,10 +298,10 @@ public class PlayerController : MonoBehaviour
             DashTimer = dashTimeLength;
             // The player should be invulnerable during dashes to dodge projectiles or enemy attacks.
             InvulnerabilityTimer = dashTimeLength;
-            
+
             // Dash Animation Effect.
             StartCoroutine(Faded());
-            
+
             // We have to get a special angle for wdetermining where Rainbowman dashes.
             dashAngle = Vector2.SignedAngle(Vector2.right, direction);
 
@@ -722,7 +722,7 @@ public class PlayerController : MonoBehaviour
             canRegen = true;
         }
 
-        if (currentTime <= -120.0f)
+        if (currentTime <= -120.0f && hasFiringDebuff == false)
         {
             ChangeFireRate(0.5f);
             hasFiringDebuff = true;
@@ -737,6 +737,7 @@ public class PlayerController : MonoBehaviour
         if (currentTime <= -180.0f)
         {
             // If the player reaches this point, they then immediately die.
+            soundSystem.PlayMusicTrack("Altar");
             currentHealth = 0;
         }
 
@@ -765,12 +766,13 @@ public class PlayerController : MonoBehaviour
     {
         // The Enemy tag only exists for backwards compatibility, I recommend using EnemyMelee instead.
         // Every tag corresponds to a different kind of enemy controller script as we transition to multiple enemy types.
-        if (other.gameObject.CompareTag("Enemy")) {
-            ChangeCurrentHealth( -(other.gameObject.GetComponent<EnemyController>().GetDamage()) );
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            ChangeCurrentHealth(-(other.gameObject.GetComponent<EnemyController>().GetDamage()));
         }
         if (other.gameObject.CompareTag("EnemyMelee"))
         {
-            ChangeCurrentHealth( -(other.gameObject.GetComponent<EnemyController>().GetDamage()) );
+            ChangeCurrentHealth(-(other.gameObject.GetComponent<EnemyController>().GetDamage()));
         }
         // This is for when the player walks into any tile on the hazards trial map
         if (other.gameObject.CompareTag("Hazard"))
@@ -792,7 +794,7 @@ public class PlayerController : MonoBehaviour
             if (c.a == 0.5f)
             {
                 c.a = 1.0f;
-            } 
+            }
             else
             {
                 c.a = 0.5f;
@@ -805,7 +807,7 @@ public class PlayerController : MonoBehaviour
         sprite.color = b;
         yield break;
     }
-    
+
     // Faded when invulnerable.
     IEnumerator Faded()
     {
@@ -821,14 +823,14 @@ public class PlayerController : MonoBehaviour
         sprite.color = b;
         yield break;
     }
-    
+
     // Beginning of public interface functions:
 
     // This increases (with a positive argument) or decreases (with a negative argument) the player's current health.
     // If the player is invulnerable (recently damaged or dashing), they can't be damaged through this.
     public void ChangeCurrentHealth(float hitPointsToAdd)
     {
-        if ( (InvulnerabilityTimer > 0) && (hitPointsToAdd < 0) )
+        if ((InvulnerabilityTimer > 0) && (hitPointsToAdd < 0))
         {
             return;
         }
@@ -956,5 +958,4 @@ public class PlayerController : MonoBehaviour
     {
         return damage;
     }
-
 }
