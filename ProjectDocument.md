@@ -361,6 +361,8 @@ https://github.com/rodsters/CrunchTime/blob/main/Observations%20and%20Playtester
 
 For this role, with the help of some tutorials and Rodney’s help, I was able to understand how 2d grid and tilesets work. We started off with just two placeholder tiles that represented the walls which had a collider on and floor with no collider. I created the base map using these trial tile sets, here is the first version of our map.
 
+![Map 1](https://github.com/rodsters/CrunchTime/blob/michael---summary-and-gameplay-explanation/MapImage1.png)
+
 When designing this map, I wanted the levels to progressively get harder. We start off with a simple introductory level with few enemies to introduce basic game mechanics, and then we go to another level with 4 barriers in the middle where players can try dodging and taking cover using these barriers. 
 The next two levels were inspired by pac man, I wanted the player to move around and take cover, in my head i would place some enemies in the around the edges more so the player is forced to take the middle route which is more complex.
 
