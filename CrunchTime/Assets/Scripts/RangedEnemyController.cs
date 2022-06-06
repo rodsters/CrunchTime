@@ -77,6 +77,8 @@ public class RangedEnemyController : MonoBehaviour
     private float timeAdded = 15.0f;
 
     private SoundManager soundSystem;
+    private bool decrementLocker = false; 
+
 
     void Start()
     {
@@ -336,8 +338,12 @@ public class RangedEnemyController : MonoBehaviour
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
 
-            enemyTracker.DecrementEnemies();
-            Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
+            if(!decrementLocker)
+            {
+                enemyTracker.DecrementEnemies();
+                Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
+                decrementLocker = true;
+            }
         }
     }
 

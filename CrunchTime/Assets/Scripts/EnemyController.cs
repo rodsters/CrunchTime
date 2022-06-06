@@ -66,6 +66,8 @@ public class EnemyController : MonoBehaviour
 
     private SoundManager soundSystem;
 
+    private bool decrementLocker = false; 
+
     void Start()
     {
         //GlobalGameState globalGameState = globalStateGO.GetComponent<GlobalGameState>();
@@ -262,9 +264,13 @@ public class EnemyController : MonoBehaviour
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
             AddTime(timeAdded);
-            
-            enemyTracker.DecrementEnemies();
-            Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
+            if(!decrementLocker)
+            {
+                enemyTracker.DecrementEnemies();
+                Debug.Log("decrement enemies : "+ enemyTracker.getNumEnemies());
+                decrementLocker = true;
+            }
+
 
         }
     }    
