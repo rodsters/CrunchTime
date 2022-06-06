@@ -1946,12 +1946,12 @@ TextureImporter:
       name: 16x16 dungeon ii wall reconfig v04 spritesheet_74
       rect:
         serializedVersion: 2
-        x: 96
+        x: 176
         y: 32
-        width: 32
-        height: 16
+        width: 16
+        height: 32
       alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:

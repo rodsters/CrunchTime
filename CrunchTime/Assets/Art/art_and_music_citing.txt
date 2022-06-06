@@ -1,5 +1,5 @@
 Sources:
 - example: name of art (crow.png), link: www.crow.com
-- frames: Dungeon Tileset II - https://0x72.itch.io/dungeontileset-ii
+- frames/paletteDungeon: Dungeon Tileset II - https://0x72.itch.io/dungeontileset-ii
 - paletteDungeonv2: 16x16 Dungeon Walls Reconfig - https://aekae13.itch.io/16x16-dungeon-walls-reconfig
 - UI: DungeonUI - https://0x72.itch.io/dungeonui

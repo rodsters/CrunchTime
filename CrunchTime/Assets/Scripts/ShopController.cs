@@ -28,26 +28,10 @@ public class ShopController : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
-        currentValue -= 120.0f;
-        timer.setTime(currentValue);
-        playerController.ChangeDamage(2.0f);
-        // + better accuracy
-        playerController.ChangeInaccuracy(0.7f);
     }
 
     public void MovespeedUpgrade()
     {
-        if (hasSpeedUpgrade == false)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            playerController = FindObjectOfType<PlayerController>();
-            var currentValue = timer.returnTime();
-            currentValue -= 50.0f;
-            timer.setTime(currentValue);
-            var newspeed = playerController.GetSpeed();
-            newspeed *= 1.3f;
-            playerController.SetSpeed(newspeed);
-            hasSpeedUpgrade = true;
         }
     }
 
