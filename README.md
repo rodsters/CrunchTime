@@ -2,27 +2,20 @@
 
 ## Summary ##
 
-**A paragraph-length pitch for your game.**
+A knight finds himself trapped in ancient ruins filled with monsters! To make things worse, vengeful spirits have placed a curse on him for disturbing their rest. Time is quickly running out! He needs to escape before the curse takes hold and he is overrun by the monsters or the curse claims him. 
 
 ## Gameplay Explanation ##
 
-**In this section, explain how the game should be played. Treat this as a manual within a game. It is encouraged to explain the button mappings and the most optimal gameplay strategy.**
+Move around with WASD
+Left click to shoot/interact
+Right click to dash
+Escape/ESC to pause
 
+Time is your most important resource. It can be gained through defeating enemies, and used to purchase upgrades. As you progress through the game, time will also be continually counting down, and can go into the negative. When time reaches 0, the game will become more difficult. If time reaches -3 minutes before you reach the end, the game is over. Reach the end of the dungeon before you run out of time.
 
-**If you did work that should be factored in to your grade that does not fit easily into the proscribed roles, add it here! Please include links to resources and descriptions of game-related material that does not fit into roles here.**
+Defeat all the enemies in a room to open the door and progress through the dungeon. Upgrades can be purchased by interacting with the shop, represented by a hourglass, to help you. Upon reaching the end, interact with the exit to escape.
 
-# Main Roles #
-
-Your goal is to relate the work of your role and sub-role in terms of the content of the course. Please look at the role sections below for specific instructions for each role.
-
-Below is a template for you to highlight items of your work. These provide the evidence needed for your work to be evaluated. Try to have at least 4 such descriptions. They will be assessed on the quality of the underlying system and how they are linked to course content. 
-
-*Short Description* - Long description of your work item that includes how it is relevant to topics discussed in class. [link to evidence in your repository](https://github.com/dr-jam/ECS189L/edit/project-description/ProjectDocumentTemplate.md)
-
-Here is an example:  
-*Procedural Terrain* - The background of the game consists of procedurally-generated terrain that is produced with Perlin noise. This terrain can be modified by the game at run-time via a call to its script methods. The intent is to allow the player to modify the terrain. This system is based on the component design pattern and the procedural content generation portions of the course. [The PCG terrain generation script](https://github.com/dr-jam/CameraControlExercise/blob/513b927e87fc686fe627bf7d4ff6ff841cf34e9f/Obscura/Assets/Scripts/TerrainGenerator.cs#L6).
-
-You should replay any **bold text** with your relevant information. Liberally use the template when necessary and appropriate.
+## Main Roles
 
 ## User Interface - Michael Bai - github: Mbai2000
 
