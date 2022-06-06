@@ -90803,7 +90803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f77b9c7ca35ba889971d55cd5ef5f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMobile: 1
+  isMobile: 0
   moveJoystick: {fileID: 1411252829}
   shootJoystick: {fileID: 657187227}
   dashButton: {fileID: 430293451}
