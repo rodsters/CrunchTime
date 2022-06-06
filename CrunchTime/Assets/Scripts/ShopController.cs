@@ -9,6 +9,9 @@ public class ShopController : MonoBehaviour
     public GameObject Panel;
     public Timer timer;
     PlayerController playerController;
+    // the player can't purchase the speed upgrade multiple times so they dont fly through walls.
+    private bool hasSpeedUpgrade = false;
+
     // The back button toggles the panel visibility, the same way the open menu script handles it.
     public void CloseShop()
     {
@@ -25,31 +28,59 @@ public class ShopController : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
-        currentValue -= 300.0f;
+        currentValue -= 120.0f;
         timer.setTime(currentValue);
         playerController.ChangeDamage(2.0f);
+        // + better accuracy
+        playerController.ChangeInaccuracy(0.7f);
     }
 
     public void MovespeedUpgrade()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        playerController = FindObjectOfType<PlayerController>();
-        var currentValue = timer.returnTime();
-        currentValue -= 150.0f;
-        timer.setTime(currentValue);
-        var newspeed = playerController.GetSpeed();
-        newspeed *= 2;
-        playerController.SetSpeed(newspeed);
+        if (hasSpeedUpgrade == false)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            playerController = FindObjectOfType<PlayerController>();
+            var currentValue = timer.returnTime();
+            currentValue -= 50.0f;
+            timer.setTime(currentValue);
+            var newspeed = playerController.GetSpeed();
+            newspeed *= 1.3f;
+            playerController.SetSpeed(newspeed);
+            hasSpeedUpgrade = true;
+        }
     }
 
     public void upgradeThree()
     {
+        // high firerate and inaccruacy, low damage
         EventSystem.current.SetSelectedGameObject(null);
+        playerController = FindObjectOfType<PlayerController>();
+
+        var currentValue = timer.returnTime();
+        currentValue -= 180.0f;
+        timer.setTime(currentValue);
+
+        playerController.ChangeDamage(0.5f);
+        playerController.ChangeFireRate(5.0f);
+        playerController.ChangeInaccuracy(3.5f);
+
     }
 
     public void upgradeFour()
     {
+        // Double regen and boost max health
         EventSystem.current.SetSelectedGameObject(null);
+        playerController = FindObjectOfType<PlayerController>();
+
+        var currentValue = timer.returnTime();
+        currentValue -= 90.0f;
+        timer.setTime(currentValue);
+
+        playerController.ChangeRegen(0.5f);
+        var currentMaxHealth = playerController.GetMaxHealth();
+
+        playerController.SetMaxHealth(currentMaxHealth * 1.4f);
     }
 }
 

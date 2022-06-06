@@ -722,7 +722,7 @@ public class PlayerController : MonoBehaviour
             canRegen = true;
         }
 
-        if (currentTime <= -120.0f)
+        if (currentTime <= -120.0f && hasFiringDebuff == false)
         {
             ChangeFireRate(0.5f);
             hasFiringDebuff = true;
@@ -737,12 +737,13 @@ public class PlayerController : MonoBehaviour
         if (currentTime <= -180.0f)
         {
             // If the player reaches this point, they then immediately die.
+            soundSystem.PlayMusicTrack("Altar");
             currentHealth = 0;
         }
 
 
         // NOTE: Remove this if else statement if we add a second floor.
-        if (currentTime <= 0.0f && playingNegativeTimeMusic == false)
+        if (currentTime <= 0.0f && playingNegativeTimeMusic == false && currentTime > -180.0f)
         {
             soundSystem.PlayMusicTrack("TestGen");
             playingNegativeTimeMusic = true;

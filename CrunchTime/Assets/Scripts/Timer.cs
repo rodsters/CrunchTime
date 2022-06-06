@@ -78,7 +78,9 @@ public class Timer : MonoBehaviour
         // The player can go into negative time, at negative three minutes they die.
         if (currentTime <=-180)
         {
-            SceneManager.LoadScene("GameOver");
+            // This causes a bug sadly as it can't suit music transitions.
+            // This is handeled by the playercontroller however.
+            // SceneManager.LoadScene("GameOver");
         }
     }
     
