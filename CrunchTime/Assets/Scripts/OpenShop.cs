@@ -15,6 +15,7 @@ public class OpenShop : MonoBehaviour
         {
             bool shopOpen = Panel.activeSelf;
             Panel.SetActive(!shopOpen);
+            Time.timeScale = 0;
         }
     }
 }
