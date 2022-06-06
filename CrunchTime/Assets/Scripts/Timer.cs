@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class Timer : MonoBehaviour
 {
     private float currentTime = 0.0f;
-    [SerializeField] private float totalTime = 600.0f;
+    [SerializeField] private float totalTime = 120.0f;
 
     // Animation variables
     private Color red;

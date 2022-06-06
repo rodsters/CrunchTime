@@ -636,7 +636,7 @@ MonoBehaviour:
   enemyHealthBar: {fileID: 724092401}
   visionRadius: 1.75
   minSeparationDistance: 1
-  timeAdded: 30
+  timeAdded: 10
   debuffTimerThrottle: 1
 --- !u!114 &1775541696
 MonoBehaviour:

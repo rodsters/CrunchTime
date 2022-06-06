@@ -451,7 +451,7 @@ MonoBehaviour:
   enemyHealthBar: {fileID: 876339819068535422}
   canMelee: 0
   meleeDamage: 0
-  timeAdded: 25
+  timeAdded: 5
 --- !u!114 &1775541696
 MonoBehaviour:
   m_ObjectHideFlags: 0

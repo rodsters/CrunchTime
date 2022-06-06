@@ -368,21 +368,26 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Explore the ruins and buy upgrades.
 
+    Defeat all the enemies in a room
+    to open the door.
+
     Time is limited so use it wisely!
 
-    Run
-    out of time and the game will get harder.
+    Run out of time
+    and the game will get harder.
 
-    If you hit -3 minutes then the
-    player dies.
+    If you hit -3 minutes then the player dies.
+
+    Reach
+    the end and escape before time runs out!
 
 
     Use WASD to Move
 
-    Left Click to Shoot
+    Left Click
+    to Shoot
 
-    Right Click/Space
-    to Dash
+    Right Click/Space to Dash
 
 '
   m_isRightToLeft: 0
@@ -411,8 +416,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 13
+  m_fontSizeBase: 13
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
