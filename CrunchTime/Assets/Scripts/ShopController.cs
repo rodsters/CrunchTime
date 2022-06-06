@@ -28,7 +28,7 @@ public class ShopController : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
-        currentValue -= 300.0f;
+        currentValue -= 120.0f;
         timer.setTime(currentValue);
         playerController.ChangeDamage(2.0f);
         // + better accuracy
@@ -37,15 +37,18 @@ public class ShopController : MonoBehaviour
 
     public void MovespeedUpgrade()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        playerController = FindObjectOfType<PlayerController>();
-        var currentValue = timer.returnTime();
-        currentValue -= 50.0f;
-        timer.setTime(currentValue);
-        var newspeed = playerController.GetSpeed();
-        newspeed *= 1.3f;
-        playerController.SetSpeed(newspeed);
-        hasSpeedUpgrade = true;
+        if (hasSpeedUpgrade == false)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            playerController = FindObjectOfType<PlayerController>();
+            var currentValue = timer.returnTime();
+            currentValue -= 50.0f;
+            timer.setTime(currentValue);
+            var newspeed = playerController.GetSpeed();
+            newspeed *= 1.3f;
+            playerController.SetSpeed(newspeed);
+            hasSpeedUpgrade = true;
+        }
     }
 
     public void upgradeThree()
@@ -55,7 +58,7 @@ public class ShopController : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
 
         var currentValue = timer.returnTime();
-        currentValue -= 250.0f;
+        currentValue -= 180.0f;
         timer.setTime(currentValue);
 
         playerController.ChangeDamage(0.5f);
@@ -71,7 +74,7 @@ public class ShopController : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
 
         var currentValue = timer.returnTime();
-        currentValue -= 200.0f;
+        currentValue -= 90.0f;
         timer.setTime(currentValue);
 
         playerController.ChangeRegen(0.5f);

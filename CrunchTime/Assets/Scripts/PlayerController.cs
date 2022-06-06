@@ -737,13 +737,13 @@ public class PlayerController : MonoBehaviour
         if (currentTime <= -180.0f)
         {
             // If the player reaches this point, they then immediately die.
-            currentHealth = 0;
             soundSystem.PlayMusicTrack("Altar");
+            currentHealth = 0;
         }
 
 
         // NOTE: Remove this if else statement if we add a second floor.
-        if (currentTime <= 0.0f && playingNegativeTimeMusic == false)
+        if (currentTime <= 0.0f && playingNegativeTimeMusic == false && currentTime > -180.0f)
         {
             soundSystem.PlayMusicTrack("TestGen");
             playingNegativeTimeMusic = true;
