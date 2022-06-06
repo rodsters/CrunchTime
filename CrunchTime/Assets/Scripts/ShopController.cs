@@ -25,9 +25,12 @@ public class ShopController : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
-        currentValue -= 300.0f;
-        timer.setTime(currentValue);
-        playerController.ChangeDamage(2.0f);
+        if (currentValue >= 300.0f)
+        {
+            currentValue -= 300.0f;
+            timer.setTime(currentValue);
+            playerController.ChangeDamage(2.0f);
+        }
     }
 
     public void MovespeedUpgrade()
@@ -35,11 +38,14 @@ public class ShopController : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         playerController = FindObjectOfType<PlayerController>();
         var currentValue = timer.returnTime();
-        currentValue -= 150.0f;
-        timer.setTime(currentValue);
-        var newspeed = playerController.GetSpeed();
-        newspeed *= 2;
-        playerController.SetSpeed(newspeed);
+        if (currentValue >= 150.0f)
+        {
+            currentValue -= 150.0f;
+            timer.setTime(currentValue);
+            var newspeed = playerController.GetSpeed();
+            newspeed *= 2;
+            playerController.SetSpeed(newspeed);
+        }
     }
 
     public void upgradeThree()
