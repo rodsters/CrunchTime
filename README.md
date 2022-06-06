@@ -199,11 +199,13 @@ In order to setup the scenario, a short intro cutscene was created that would pl
 **Include links to your presskit materials and trailer.**
 
 [Press Kit](https://trevnerd.github.io/CrunchTimePressKit/)
-[Trailer](https://trevnerd.github.io/CrunchTimePressKit/#videos)
+[Trailer](https://youtu.be/PIaADqKG3h0)
 
 **Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?**
 
-TODO....
+When I created the trailer I wanted the watcher to be able to understand the main gameplay system without any words on screen. As such, I constructed the trailer with a rough sequence in mind to have the progression of the trailer match the general progression of the game. We see the main menu, then the player, then the timer, then the player combating foes. These are all main aspects of the game that a player would immediately see and interact with. Then, the player eventually finds the shop in which they can buy great upgrades at the cost of that time they saw emphasized earlier. Through the purchase of the item, the player is affected by *negative time* which has it's own visual element that appear for the trailer. Now, that all the elements have been introduced we are able to have some fun and dash around fighting enemies at a fast pace until we die. With such gameplay we are enticed to press start again. Thus, the call to action is put forth with an end card for the game. The trailer was made with the game sounds and music edited for dramatization to give additional power to the visual elements and cuts.
+
+I chose the screenshots with much less narrative thought involed. I similarly wanted to display the various features of the game that could be represented visually, so I took a sample of pictures throughout my gameplay.
 
 ## Game Feel
 
