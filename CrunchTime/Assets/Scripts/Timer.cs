@@ -9,9 +9,10 @@ using UnityEngine.SceneManagement;
 public class Timer : MonoBehaviour
 {
     private float currentTime = 0.0f;
-    [SerializeField] private float totalTime = 600.0f;
+    [SerializeField] private float totalTime = 120.0f;
 
     // Animation variables
+    private GameObject blind;
     private Color red;
     private Color blue;
 
@@ -21,6 +22,7 @@ public class Timer : MonoBehaviour
     {
         currentTime = totalTime;
         StartCoroutine(Flash());
+        blind = GameObject.Find("Blind");
         blue = new Color(0.607f, 1.0f, 0.964f, 1.0f);
         red = new Color(0.854f, 0.305f, 0.219f, 1.0f);
     }
@@ -57,13 +59,22 @@ public class Timer : MonoBehaviour
                 newColor.a = timerText.color.a;
                 timerText.color = newColor;
             }
+            
+            blind.SetActive(false);
         }
         else
         {
             // Floor returns -1 when between (-1,0)
             minuteTime = Mathf.CeilToInt(currentTime/60);
             secondTime = Mathf.CeilToInt(Mathf.Abs(currentTime % 60));
-            timeString = "-" + minuteTime.ToString("0") + ":" + secondTime.ToString("00");
+            if (minuteTime == 0)
+            {
+            	timeString = "-" + minuteTime.ToString("0") + ":" + secondTime.ToString("00");
+            }
+            else
+            {
+            	timeString = minuteTime.ToString("0") + ":" + secondTime.ToString("00");
+            }
             
             // Set color to #DA4E38
             if (timerText.color.g != 0.305f)
@@ -72,6 +83,8 @@ public class Timer : MonoBehaviour
                 newColor.a = timerText.color.a;
                 timerText.color = newColor;
             }
+            
+            blind.SetActive(true);
         }
         // Referenced https://answers.unity.com/questions/45676/making-a-timer-0000-minutes-and-seconds.html in order to make the text appear properly
         timerText.text = timeString;

@@ -260,7 +260,6 @@ public class EnemyController : MonoBehaviour
         // If the enemy runs out of health, they die.
         if (currentHealth <= 0)
         {
-            AddTime(timeAdded);
             soundSystem.PlaySoundEffect("EnemyDeath");
             Destroy(gameObject);
             AddTime(timeAdded);

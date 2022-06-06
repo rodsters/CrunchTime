@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
 
     // This is the amount of damage points each projectile deals. Like inaccuracy, it is accessed by the projectile prefab.
-    [SerializeField] static public float damage = 3.35f;
+    [SerializeField] static public float damage = 10f;
 
 
     // To avoid counter-strike style bunnyhop shennanigans, decay and sustain are basically ignored and set to normal speed.
@@ -737,6 +737,7 @@ public class PlayerController : MonoBehaviour
         if (currentTime <= -180.0f)
         {
             // If the player reaches this point, they then immediately die.
+            soundSystem.PlayMusicTrack("Altar");
             currentHealth = 0;
         }
 
