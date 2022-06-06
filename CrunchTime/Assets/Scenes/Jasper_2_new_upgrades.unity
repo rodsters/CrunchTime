@@ -614,7 +614,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Upgrade 4
+  m_text: Regen/Health up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
   m_sharedMaterial: {fileID: 8270856256836619602, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
@@ -748,7 +748,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TBD
+  m_text: 200 Seconds
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
   m_sharedMaterial: {fileID: 8270856256836619602, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
@@ -2038,7 +2038,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TBD
+  m_text: 250 Seconds
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
   m_sharedMaterial: {fileID: 8270856256836619602, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
@@ -5516,7 +5516,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Upgrade 3
+  m_text: Minigun
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
   m_sharedMaterial: {fileID: 8270856256836619602, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
@@ -5998,7 +5998,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: x2 Movespeed
+  m_text: x1.3 Movespeed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
   m_sharedMaterial: {fileID: 8270856256836619602, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
@@ -7008,8 +7008,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   ProjectilePrefab: {fileID: 9104952073214702525, guid: 248ecc1decd71bb4ea4abee47b294199, type: 3}
-  maxHealth: 1
-  FireRate: 0.01
+  maxHealth: 40
+  FireRate: 0.2
   AttackDuration: 0.45
   Attack:
     serializedVersion: 2
@@ -89684,7 +89684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Panel: {fileID: 1472807034}
-  timer: {fileID: 0}
+  timer: {fileID: 1729146516}
 --- !u!1 &1626748217
 GameObject:
   m_ObjectHideFlags: 0
@@ -90917,7 +90917,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1784021352}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1624566457}
+        m_TargetAssemblyTypeName: ShopController, Assembly-CSharp
+        m_MethodName: upgradeThree
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1784021352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91609,7 +91621,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1912490066}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1624566457}
+        m_TargetAssemblyTypeName: ShopController, Assembly-CSharp
+        m_MethodName: upgradeFour
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1912490066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124410,7 +124434,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 150 Seconds
+  m_text: 50 Seconds
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
   m_sharedMaterial: {fileID: 8270856256836619602, guid: f2b3777e3ee8024768ee22e1f4ef6c19, type: 2}
