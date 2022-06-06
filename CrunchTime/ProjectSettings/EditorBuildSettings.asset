@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/IntroCutscene.unity
     guid: fac7c9cad8ee6474a9468d8896681260
   - enabled: 1
-    path: Assets/Scenes/Main Scene.unity
+    path: Assets/Scenes/OldMainScene2.unity
     guid: 897ea2311161248fe8fadbdfcee15e0e
   - enabled: 1
     path: Assets/Scenes/GameOver.unity
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HowToPlay.unity
     guid: df5da6f8b88fc3240a61d60ea2b985d0
+  - enabled: 1
+    path: Assets/Scenes/Victory.unity
+    guid: 33141555f2be8b94c966112a78c1cf99
   m_configObjects: {}
