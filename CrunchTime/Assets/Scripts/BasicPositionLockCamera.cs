@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Code taken from ECS 189L Project 2
 public class BasicPositionLockCamera : MonoBehaviour
 {
     private Camera managedCamera;
