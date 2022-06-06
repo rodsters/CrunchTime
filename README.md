@@ -147,6 +147,27 @@ A video was referenced to create the enemy health bars.
 
 **Document what game states and game data you managed and what design patterns you used to complete your task.**
 
+## Enemy AI - Trevor Lopez
+
+**Document the AI systems present that allow for intelligent enemies, and describe how these systems were adjusted to account for a smoother gameplay experience.**
+
+*A\* Pathfiniding* - This aspect of enemy movement tracks the player or any other arbitrary `Transform` object and moves the enemy agent toward that object. I initially worked to create the algorithm for this from scratch since the Unity `NavMesh` system I had heard about doesn't work for 2D games. I had tried to implement A* using Dijkstra's algorithm with a heuristic function based on straight line distance to the target, but I ran into so many issues with this. Such issues included accounting for the size of the AI agent, making an efficent static graph structure, the main thread being blocked during path creation, and needing to reimplement basic data structures that aren't a part of the C# standard library in the version that our Unity runs (eg. priority queue). Thus, I opted instead to use [Aron Granberg's A* library](https://arongranberg.com/astar/docs/) so that my teammates wouldn't have to wait ages for me to get that all to work. Using this library I was able generate and update paths between two points along the tilemap grid thanks to the static graph generated from putting our walls on a separate obstacle layer that could be scanned by our A* object. Even with this solution, the enemy agent size still was not properly accounted for in grid navigation, and it had some jittery movement when regenerating paths sometimes, but I was able later to deal with this through the addition of steering behavior. 
+[Original implementaion](https://github.com/rodsters/CrunchTime/blob/0807745196ad7705d8781913eb20c7e96f942474/CrunchTime/Assets/Scripts/EnemyController.cs#L13-L73)
+[Main presence in current system](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L99-L139)
+
+*Flocking and Steering* - We ended up having problems with enemies clumping together as the A* paths would converge close to the player. Thus, we ended up needing a system to not so rigidly follow the A* generated paths by controlling the speed and direction of movement of an agent based on proximity to other nearby enemies. Using some basic ideas as inspiration from [boids](https://www.youtube.com/watch?v=bqtqltqcQhw), I have the enemy agent find a starting direction based on the direction that they should be moving due to the A* path. I then modify the direction of movement by having the agent look within some set viewing radius and angle outward in the starting direction. Using raycasts evenly spaced in this viewing region outward from the agent, we can add up what fraction of the viewing radius that a given ray was hit at (taking into account the direction vector of the ray). After normalizing the sum of vectors, this effectively comes up with a new direction weighted toward a more open space. This is what I denote as *steering*. I then use another raycast in this new direction to determine if there is still an enemy within the viewing radius, and if there is, I scale the agent's max speed down to avoid clumping. In a very rudimentary sense, I denote this as *flocking*. I also made gizmos to help my teammates in deciding an enemy agent's viewing area (radius and angle), and I also used them to help me in debugging.
+[Flocking implementation](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L129-L181)
+[Steering implementation](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L183-L194)
+[Gizmos](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L218-L242)
+
+*Obstacle Impulse* - With the flocking and steering system in place, I still had other troubles with enemy agents pushing each other into obstacles (eg. the walls). As such I made it so that if the enemy gets too close to a wall, there is an impulse in the steering direction opposite the direction of the ray that hit the wall. This ended up being a simple but effective solution for smoother movement. I would like to note that I wan't able look at this problem in a similar way to the [boids with obstacles](https://youtu.be/bqtqltqcQhw?t=104) since the enemy doesn't rotate toward its movement direction and, as such, a ray not hitting an obstacle doesn't guarantee a path along that ray that avoids the obstacles when also accounting for the enemy's size.
+[Impulse implementation](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L163-L172)
+
+*Straight Shot Attack Movement* - One last problem of the A* pathfinding is that since paths are regenerated at a set interval, enemies near the player would end up reaching the end of their path where the player used to be. A convenient fix that I made was to have the enemy agent use a starting direction pointing straight toward the player if they were in line-of-sight without obstruction by a wall (used raycast to determine this). Due to obstacle impulse and steering, this doesn't have a problem with bumping into obstacles partailly within the line-of-sight path.
+[Straight shot implementation](https://github.com/rodsters/CrunchTime/blob/701319b196fb3181710df6ce3694fd6b67ba5f57/CrunchTime/Assets/Scripts/EnemyController.cs#L118-L128)
+
+Sadly, I was unable to get enough time to design a boss for our game, but I believe that these systems could be easily extended to meet the need of such a system in the abstraction of the `EnemyController` as an underlying `MonoBehavior` of an enemy — including a boss.
+
 # Sub-Roles
 
 ## Audio
@@ -173,13 +194,16 @@ In order to setup the scenario, a short intro cutscene was created that would pl
 
 [A video was referenced when creating the opening cutscene](https://youtu.be/Y5RDtN1jM6A)
 
-## Press Kit and Trailer
+## Press Kit and Trailer - Trevor Lopez
 
 **Include links to your presskit materials and trailer.**
 
+[Press Kit](https://trevnerd.github.io/CrunchTimePressKit/)
+[Trailer](https://trevnerd.github.io/CrunchTimePressKit/#videos)
+
 **Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?**
 
-
+TODO....
 
 ## Game Feel
 
